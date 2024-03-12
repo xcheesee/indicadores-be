@@ -18,7 +18,7 @@ return new class extends Migration
             $table->foreignId('departamento_id')->constrained('departamentos');
             $table->foreignId('tipo_dado_id')->constrained('tipo_dados');
             $table->foreignId('fonte_id')->constrained('fontes');
-            $table->foreignId('metado_id')->constrained('metados');
+            $table->foreignId('metadados_id')->constrained('metadados');
             $table->boolean('ativo')->default(1);
             $table->timestamps();
         });
@@ -55,6 +55,6 @@ return new class extends Migration
         Schema::dropIfExists('indicador_variaveis');
         Schema::dropIfExists('grafico_variaveis');
         Schema::dropIfExists('variavel_valores');
-        
+
     }
 };

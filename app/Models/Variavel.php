@@ -10,7 +10,7 @@ class Variavel extends Model
     use HasFactory;
 
     protected $table = 'variaveis';
-    protected $fillable = ['codigo', 'nome', 'departamento_id', 'tipo_dado_id', 'fonte_id', 'metado_id', 'ativo'];
+    protected $fillable = ['codigo', 'nome', 'departamento_id', 'tipo_dado_id', 'fonte_id', 'metadado_id', 'ativo'];
 
     public function departamento()
     {
@@ -27,8 +27,8 @@ class Variavel extends Model
         return $this->belongsTo(Fonte::class);
     }
 
-    public function metado()
+    public function metadado()
     {
-        return $this->belongsTo(Metado::class);
+        return $this->belongsTo(Metadado::class);
     }
 }
