@@ -11,7 +11,7 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('metados', function (Blueprint $table) {
+        Schema::create('metadados', function (Blueprint $table) {
             $table->id();
             $table->string('nome', 45);
             $table->foreignId('tipo_medida_id')->nullable()->constrained('tipo_medidas');
@@ -31,6 +31,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('metados');
+        Schema::dropIfExists('metadados');
     }
 };

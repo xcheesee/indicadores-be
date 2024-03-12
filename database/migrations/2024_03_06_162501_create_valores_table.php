@@ -15,7 +15,7 @@ return new class extends Migration
             $table->id();
             $table->string('nome', 45);
             $table->foreignId('regiao_id')->constrained('regioes');
-            $table->date('periodo');
+            $table->string('periodo',45); //pode assumir qualquer valor, de número a texto. Pode ser ano, semestre, mês, etc
             $table->float('valor', 16,2);
             $table->boolean('ativo')->default(1);
             $table->timestamps();
