@@ -9,8 +9,7 @@
 
 <div class="row containerTabela justify-content-center">
     <div class="row d-flex">
-        <div class="col-10">
-        </div>
+        <div class="col-10"></div>
         <div class="col-2 text-end">
             <a class="btn btn-primary" href="{{ route('roles.create') }}">Novo Perfil</a>
         </div>

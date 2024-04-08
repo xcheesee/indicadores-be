@@ -11,7 +11,7 @@
         @csrf
         <div class="form-group">
             <label for="login">Login</label>
-            <input type="login" name="login" id="login" required class="form-control">
+            <input type="email" name="email" id="login" required class="form-control">
         </div>
 
         <div class="form-group">

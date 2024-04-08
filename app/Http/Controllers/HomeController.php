@@ -52,4 +52,9 @@ class HomeController extends Controller
         return view('admin', compact('mensagem'));
         //return view('home');
     }
+
+    public function cadaux()
+    {
+        return view('cadaux.index');
+    }
 }

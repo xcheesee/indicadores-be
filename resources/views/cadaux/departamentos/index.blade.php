@@ -1,0 +1,126 @@
+@extends('layouts.base')
+
+@section('cabecalho')
+    @include('layouts.cabecalho', ['titulo' => 'Departamento', 'rota' => 'cadaux'])
+@endsection
+
+@section('conteudo')
+@include('layouts.mensagem', ['mensagem' => $mensagem])
+@include('layouts.erros', ['errors' => $errors])
+
+<div class="row containerTabela justify-content-center">
+    <div class="row">
+        <div class="d-flex justify-content-end">
+            <div>
+                <button class="btn btn-primary buttonSlide" type="button" id="criarDept" style="display: none">Novo Departamento</button>
+            </div>
+        </div>
+        <div class="mb-3" id="newform">
+            <h4 class="mb-3">Novo Departamento</h4>
+            {{ html()->form('POST', route('departamento-create'))->open() }}
+                @csrf
+                <div class="row">
+                    <div class="form-group required col-md-6">
+                        <label class="control-label" for="nome"><strong>Nome: </strong></label>
+                        <input type="text" class="inputForm form-control" name="nome" id="nome">
+                    </div>
+                    <div class="form-group required col-md-6">
+                        <label class="control-label" for="sigla"><strong>Sigla: </strong></label>
+                        <input type="text" class="inputForm form-control" name="sigla" id="sigla">
+                    </div>
+                </div>
+                <button class="btn btn-primary mt-3 me-1 btn-criar" type="submit" >Criar</button>
+                <button class="btn btn-warning mt-3 buttonSlide" type="button" id="cancelarDept">Cancelar</button>
+            {{ html()->form()->close() }}
+        </div>
+        <table class="table">
+            <thead class="thead-dark">
+                <tr>
+                    <th class="col-sm-1">ID</th>
+                    <th class="col-sm-3">Nome</th>
+                    <th class="col-sm-2">Sigla</th>
+                    <th>Ação</th>
+                </tr>
+            </thead>
+            <tbody class="align-middle">
+                @foreach ($data as $key => $dept)
+                <tr>
+                    <td>{{ $dept->id }}</td>
+                    {{ html()->form('POST', route('departamento-update', $dept->id))->open() }}
+                    @csrf
+                    <td>
+                        <span class="texto-{{ $dept->id }}">{{ $dept->nome }}</span>
+                        <input type="text" class="form-control campo-{{ $dept->id }}" style="display: none" id="nome" name="nome" value="{{ $dept->nome }}">
+                    </td>
+                    <td>
+                        <span class="texto-{{ $dept->id }}">{{ $dept->sigla }}</span>
+                        <input type="text" class="form-control campo-{{ $dept->id }}" style="display: none" id="sigla" name="sigla" value="{{ $dept->sigla }}">
+                    </td>
+                    <td>
+                        <div>
+                            @can('role-edit')
+                                <button class="btn btn-primary btn-editar-{{ $dept->id }}" onclick="editarDepartamento({{$dept->id}})" type="button"><i class="fas fa-edit"></i></button>
+                                <button class="btn btn-success btn-save-{{ $dept->id }}" type="submit" style="display: none"><i class="fas fa-check"></i></button>
+                                <button class="btn btn-warning btn-cancelar-{{ $dept->id }}" onclick="cancelarEditarDepartamento({{$dept->id}})" type="button" style="display: none"><i class="fas fa-xmark"></i></button>
+                            @endcan
+                            @can('role-delete')
+                            <span id="btn-delete-{{ $dept->id }}" >
+                                <a class="btn btn-danger" href="{{ route('departamento-destroy',$dept->id) }}" onclick="return confirm('Tem certeza que deseja remover este registro?')">
+                                    <i class="fas fa-trash-alt"></i>
+                                </a>
+                            </span>
+                            @endcan
+                        </div>
+                    </td>
+                    {{ html()->form()->close() }}
+                </tr>
+                @endforeach
+            </tbody>
+        </table>
+    </div>
+</div>
+<script>
+$( "#newform" ).hide();
+$( "#criarDept" ).show()
+
+if({{ $errors->count() }} > 0){
+    $( "#newform" ).show();
+    $( "#criarDept" ).hide();
+} 
+
+$( ".buttonSlide" ).on( "click", function() {
+    $( "#criarDept" ).hide(500);
+    $( "#newform" ).slideToggle( "slow" );
+});
+
+$( "#cancelarDept" ).on( "click", function() {
+    $( "#criarDept" ).show(500);
+});
+
+var flagId = null
+function editarDepartamento(Id){
+    if (flagId != Id && flagId != null) {
+        cancelarEditarDepartamento(flagId)
+    }
+
+    $( `.btn-editar-${Id}` ).hide();
+    $( `#btn-delete-${Id}` ).hide();
+    $( `.btn-save-${Id}` ).show();
+    $( `.btn-cancelar-${Id}` ).show();
+    $( `.campo-${Id}` ).show();
+    $( `.texto-${Id}` ).hide();
+
+    flagId = Id
+}
+
+function cancelarEditarDepartamento(Id){
+    $( `.btn-editar-${Id}` ).show();
+    $( `#btn-delete-${Id}` ).show();
+    $( `.btn-save-${Id}` ).hide();
+    $( `.btn-cancelar-${Id}` ).hide();
+    $( `.campo-${Id}` ).hide();
+    $( `.texto-${Id}` ).show();
+}
+
+</script>
+@endsection
