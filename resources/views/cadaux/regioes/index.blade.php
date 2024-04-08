@@ -5,7 +5,7 @@
 @endsection
 
 @section('conteudo')
-@include('layouts.mensagem', ['mensagem' => $mensagem])
+@include('layouts.mensagem', ['mensagem' => $mensagem]) 
 
 <div class="row containerTabela justify-content-center">
     <div class="row">
@@ -29,7 +29,12 @@
                     </div>
                     <div class="form-group required col-md-4">
                         <label class="control-label" for="tipo_regiao_id"><strong>Tipo da Região:</strong></label>
-                        <select class="form-control form-select" name="tipo_regiao_id" id="tipo_regiao_id"></select>
+                        <select class="form-control form-select" name="tipo_regiao_id" id="tipo_regiao_id">
+                            <option value="" selected>Selecione o tipo da regiao</option>
+                            @foreach ($tipo_regiao as $t_regiao)
+                                <option value="{{ $t_regiao->id }}">{{ $t_regiao->nome }}</option>  
+                            @endforeach
+                        </select>
                     </div>
                 </div>
                 <button class="btn btn-primary mt-3 me-1 btn-criar" type="submit" >Criar</button>
@@ -50,25 +55,34 @@
                 @foreach ($data as $key => $regiao)
                 <tr>
                     <td>{{ $regiao->id }}</td>
-                    {{ html()->form('POST', route('regiao-update', $fonte->id))->open() }}
+                    {{ html()->form('POST', route('regiao-update', $regiao->id))->open() }}
                     <td>
                         <span class="texto-{{ $regiao->id }}">{{ $regiao->nome }}</span>
                         <input type="text" class="form-control campo-{{ $regiao->id }}" style="display: none" id="nome" name="nome" value="{{ $regiao->nome }}">
                     </td>
                     <td>
                         <span class="texto-{{ $regiao->id }}">{{ $regiao->sigla }}</span>
-                        <input type="text" class="form-control campo-{{ $regiao->id }}" style="display: none" id="sigla" name="sigla" value="{{ $regiao->nome }}">
+                        <input type="text" class="form-control campo-{{ $regiao->id }}" style="display: none" id="sigla" name="sigla" value="{{ $regiao->sigla }}">
                     </td>
                     <td>
-                        <span class="texto-{{ $regiao->id }}">{{ $regiao->tipo_regiao_id }}</span>
-                        <input type="text" class="form-control campo-{{ $regiao->id }}" style="display: none" id="tipo_regiao_id" name="tipo_regiao_id" value="{{ $regiao->tipo_regiao_id }}">
+                        <span class="texto-{{ $regiao->id }}">{{ $regiao->tipo_regiao->sigla }}</span>
+                        <select class="form-control form-select campo-{{ $regiao->id }}" style="display: none" name="tipo_regiao_id" id="tipo_regiao_id">
+                            <option value="" selected>Selecione o tipo da regiao</option>
+                            @foreach ($tipo_regiao as $t_regiao)
+                                @if ($regiao->tipo_regiao_id == $regiao->tipo_regiao->id)
+                                    <option value="{{ $t_regiao->id }}" selected>{{ $t_regiao->nome }}</option>
+                                @else
+                                    <option value="{{ $t_regiao->id }}">{{ $t_regiao->nome }}</option>
+                                @endif
+                            @endforeach
+                        </select>
                     </td>
                     <td>
                         <div>
                             @can('role-edit')
-                                <button class="btn btn-primary btn-editar-{{ $fonte->id }}" onclick="editarRegiao({{$fonte->id}})" type="button"><i class="fas fa-edit"></i></button>
-                                <button class="btn btn-success btn-save-{{ $fonte->id }}" type="submit" style="display: none"><i class="fas fa-check"></i></button>
-                                <button class="btn btn-warning btn-cancelar-{{ $fonte->id }}" onclick="cancelarEditarRegiao({{$fonte->id}})" type="button" style="display: none"><i class="fas fa-xmark"></i></button>
+                                <button class="btn btn-primary btn-editar-{{ $regiao->id }}" onclick="editarRegiao({{$regiao->id}})" type="button"><i class="fas fa-edit"></i></button>
+                                <button class="btn btn-success btn-save-{{ $regiao->id }}" type="submit" style="display: none"><i class="fas fa-check"></i></button>
+                                <button class="btn btn-warning btn-cancelar-{{ $regiao->id }}" onclick="cancelarEditarRegiao({{$regiao->id}})" type="button" style="display: none"><i class="fas fa-xmark"></i></button>
                             @endcan
                             @can('role-delete')
                             <span id="btn-delete-{{ $regiao->id }}">

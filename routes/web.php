@@ -50,10 +50,10 @@ Route::prefix(env('APP_FOLDER', ''))->group(function () { //considerando que o p
         Route::get('/cadaux/fonte/{id}/apagar', [App\Http\Controllers\FonteController::class, 'destroy'])->name('fonte-destroy');
 
         // // Tipo Regiao
-        // Route::get('/cadaux/tipo_regioes', [App\Http\Controllers\TipoRegiaoController::class, 'index'])->name('tipo_regioes');
-        // Route::post('/cadaux/tipo_regiao/criar', [App\Http\Controllers\TipoRegiaoController::class, 'create'])->name('tipo_regiao-create');
-        // Route::post('/cadaux/tipo_regiao/{id}/editar', [App\Http\Controllers\TipoRegiaoController::class, 'update'])->name('tipo_regiao-update');
-        // Route::get('/cadaux/tipo_regiao/{id}/apagar', [App\Http\Controllers\TipoRegiaoController::class, 'destroy'])->name('tipo_regiao-destroy');
+        Route::get('/cadaux/tipo_regioes', [App\Http\Controllers\TipoRegiaoController::class, 'index'])->name('tipo_regioes');
+        Route::post('/cadaux/tipo_regiao/criar', [App\Http\Controllers\TipoRegiaoController::class, 'create'])->name('tipo_regiao-create');
+        Route::post('/cadaux/tipo_regiao/{id}/editar', [App\Http\Controllers\TipoRegiaoController::class, 'update'])->name('tipo_regiao-update');
+        Route::get('/cadaux/tipo_regiao/{id}/apagar', [App\Http\Controllers\TipoRegiaoController::class, 'destroy'])->name('tipo_regiao-destroy');
 
         // Regiao
         Route::get('/cadaux/regioes', [App\Http\Controllers\RegiaoController::class, 'index'])->name('regioes');

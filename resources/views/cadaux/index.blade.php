@@ -12,6 +12,7 @@
                 <div class="list-group list-group-flush">
                     <a href="{{ route('departamentos') }}" class="list-group-item list-group-item-action">Departamentos</a>
                     <a href="{{ route('fontes') }}" class="list-group-item list-group-item-action">Fontes</a>
+                    <a href="{{ route('tipo_regioes') }}" class="list-group-item list-group-item-action">Tipo das Regiões</a>
                     <a href="{{ route('regioes') }}" class="list-group-item list-group-item-action">Regiões</a>
                 </div>
             </li>
