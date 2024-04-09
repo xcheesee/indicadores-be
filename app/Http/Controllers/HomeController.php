@@ -57,4 +57,9 @@ class HomeController extends Controller
     {
         return view('cadaux.index');
     }
+
+    public function publicacao()
+    {
+        return view('publicacao.index');
+    }
 }

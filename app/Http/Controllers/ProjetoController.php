@@ -12,14 +12,30 @@ class ProjetoController extends Controller
 {
     public function index(Request $request) 
     {
+        $filtros = array();
+        $filtros['nome'] = $request->query('nome');
+        $filtros['departamento_id'] = $request->query('departamento_id');
+        $filtros['ativo'] = $request->query('ativo');
+
         $data = Projeto::query()
             ->orderBy('id', 'ASC')
             ->select('projetos.*')
             ->leftJoin('departamentos', 'departamentos.id', '=', 'projetos.departamento_id')
+            ->when($filtros['nome'], function ($query, $val) {
+                return $query->where('projetos.nome','like','%'.$val.'%');
+            })
+            ->when($filtros['departamento_id'], function ($query, $val) {
+                return $query->where('projetos.departamento_id','like','%'.$val.'%');
+            })
+            ->when($filtros['ativo'], function ($query, $val) {
+                return $query->where('projetos.ativo','like','%'.$val.'%');
+            })
             ->paginate(10);
+
+        $departamentos = Departamento::query()->where('ativo', '=', 1)->orderBy('nome')->get();
         
         $mensagem = $request->session()->get('mensagem');
-        return view('projeto.index', compact('data','mensagem'));
+        return view('publicacao.projeto.index', compact('data','mensagem', 'departamentos', 'filtros'));
     }
 
     public function create(Request $request)
@@ -27,7 +43,7 @@ class ProjetoController extends Controller
         $mensagem = $request->session()->get('mensagem');
         $departamentos = Departamento::query()->where('ativo', '=', 1)->orderBy('id')->get();
 
-        return view('projeto.create', compact('mensagem', 'departamentos'));
+        return view('publicacao.projeto.create', compact('mensagem', 'departamentos'));
     }
 
     public function store(StoreProjetoRequest $request) 
@@ -43,7 +59,7 @@ class ProjetoController extends Controller
         DB::commit();
 
         $request->session()->flash('mensagem', "Projeto '{$projeto->nome}' criada com sucesso!");
-        return redirect()->route('projeto');
+        return redirect()->route('projetos');
     }
 
     public function show($id, Request $request)
@@ -53,7 +69,7 @@ class ProjetoController extends Controller
             
         $mensagem = $request->session()->get('mensagem');
 
-        return view('projeto.show', compact('mensagem', 'projeto', 'departamento'));
+        return view('publicacao.projeto.show', compact('mensagem', 'projeto', 'departamento'));
     }
 
     public function edit($id)
@@ -62,7 +78,7 @@ class ProjetoController extends Controller
         $departamentos = Departamento::query()->where('ativo', '=', 1)->orderBy('id')->get();
 
         
-        return view('projeto.edit', compact('projeto', 'departamentos'));
+        return view('publicacao.projeto.edit', compact('projeto', 'departamentos'));
     }
 
     public function update($id, StoreProjetoRequest $request)

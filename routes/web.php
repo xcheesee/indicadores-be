@@ -36,6 +36,7 @@ Route::prefix(env('APP_FOLDER', ''))->group(function () { //considerando que o p
         // Route::get('/grafico', [App\Http\Controllers\ChartController::class, 'index'])->name('chart');
 
         Route::get('/cadaux', [App\Http\Controllers\HomeController::class, 'cadaux'])->name('cadaux');
+        Route::get('/publicacao', [App\Http\Controllers\HomeController::class, 'publicacao'])->name('publicacao');
 
         // Departamento
         Route::get('/cadaux/departamento', [App\Http\Controllers\DepartamentoController::class, 'index'])->name('departamentos');
@@ -49,7 +50,7 @@ Route::prefix(env('APP_FOLDER', ''))->group(function () { //considerando que o p
         Route::post('/cadaux/fonte/{id}/editar', [App\Http\Controllers\FonteController::class, 'update'])->name('fonte-update');
         Route::get('/cadaux/fonte/{id}/apagar', [App\Http\Controllers\FonteController::class, 'destroy'])->name('fonte-destroy');
 
-        // // Tipo Regiao
+        // Tipo Regiao
         Route::get('/cadaux/tipo_regioes', [App\Http\Controllers\TipoRegiaoController::class, 'index'])->name('tipo_regioes');
         Route::post('/cadaux/tipo_regiao/criar', [App\Http\Controllers\TipoRegiaoController::class, 'create'])->name('tipo_regiao-create');
         Route::post('/cadaux/tipo_regiao/{id}/editar', [App\Http\Controllers\TipoRegiaoController::class, 'update'])->name('tipo_regiao-update');
@@ -62,11 +63,11 @@ Route::prefix(env('APP_FOLDER', ''))->group(function () { //considerando que o p
         Route::get('/cadaux/regiao/{id}/apagar', [App\Http\Controllers\RegiaoController::class, 'destroy'])->name('regiao-destroy');
 
         // Projeto
-        Route::get('/projeto', [App\Http\Controllers\ProjetoController::class, 'index'])->name('projeto');
-        Route::get('/projeto/novo', [App\Http\Controllers\ProjetoController::class, 'create'])->name('projeto-create');
+        Route::get('/publicacao/projeto', [App\Http\Controllers\ProjetoController::class, 'index'])->name('projetos');
+        Route::get('/publicacao/projeto/novo', [App\Http\Controllers\ProjetoController::class, 'create'])->name('projeto-create');
         Route::post('/projeto/criar', [App\Http\Controllers\ProjetoController::class, 'store'])->name('projeto-store');
-        Route::get('/projeto/{id}/visualizar', [App\Http\Controllers\ProjetoController::class, 'show'])->name('projeto-show');
-        Route::get('/projeto/{id}/editar', [App\Http\Controllers\ProjetoController::class, 'edit'])->name('projeto-edit');
+        Route::get('/publicacao/projeto/{id}/visualizar', [App\Http\Controllers\ProjetoController::class, 'show'])->name('projeto-show');
+        Route::get('/publicacao/projeto/{id}/editar', [App\Http\Controllers\ProjetoController::class, 'edit'])->name('projeto-edit');
         Route::post('/projeto/{id}/editar', [App\Http\Controllers\ProjetoController::class, 'update'])->name('projeto-update');
 
         //Gestão de Usuários e Permissões
