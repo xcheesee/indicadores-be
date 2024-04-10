@@ -38,6 +38,8 @@ Route::prefix(env('APP_FOLDER', ''))->group(function () { //considerando que o p
         Route::get('/cadaux', [App\Http\Controllers\HomeController::class, 'cadaux'])->name('cadaux');
         Route::get('/publicacao', [App\Http\Controllers\HomeController::class, 'publicacao'])->name('publicacao');
 
+        // Cadastros Auxiliares
+
         // Departamento
         Route::get('/cadaux/departamento', [App\Http\Controllers\DepartamentoController::class, 'index'])->name('departamentos');
         Route::post('/cadaux/departamento/criar', [App\Http\Controllers\DepartamentoController::class, 'create'])->name('departamento-create');
@@ -62,6 +64,8 @@ Route::prefix(env('APP_FOLDER', ''))->group(function () { //considerando que o p
         Route::post('/cadaux/regiao/{id}/editar', [App\Http\Controllers\RegiaoController::class, 'update'])->name('regiao-update');
         Route::get('/cadaux/regiao/{id}/apagar', [App\Http\Controllers\RegiaoController::class, 'destroy'])->name('regiao-destroy');
 
+        // Publicação
+
         // Projeto
         Route::get('/publicacao/projeto', [App\Http\Controllers\ProjetoController::class, 'index'])->name('projetos');
         Route::get('/publicacao/projeto/novo', [App\Http\Controllers\ProjetoController::class, 'create'])->name('projeto-create');
@@ -69,6 +73,14 @@ Route::prefix(env('APP_FOLDER', ''))->group(function () { //considerando que o p
         Route::get('/publicacao/projeto/{id}/visualizar', [App\Http\Controllers\ProjetoController::class, 'show'])->name('projeto-show');
         Route::get('/publicacao/projeto/{id}/editar', [App\Http\Controllers\ProjetoController::class, 'edit'])->name('projeto-edit');
         Route::post('/projeto/{id}/editar', [App\Http\Controllers\ProjetoController::class, 'update'])->name('projeto-update');
+
+        // Indicador
+        Route::get('/publicacao/indicadores', [App\Http\Controllers\ProjetoController::class, 'index'])->name('indicadores');
+        Route::get('/publicacao/indicador/novo', [App\Http\Controllers\ProjetoController::class, 'create'])->name('indicador-create');
+        Route::post('/indicador/criar', [App\Http\Controllers\ProjetoController::class, 'store'])->name('indicador-store');
+        Route::get('/publicacao/indicador/{id}/visualizar', [App\Http\Controllers\ProjetoController::class, 'show'])->name('indicador-show');
+        Route::get('/publicacao/indicador/{id}/editar', [App\Http\Controllers\ProjetoController::class, 'edit'])->name('indicador-edit');
+        Route::post('/indicador/{id}/editar', [App\Http\Controllers\ProjetoController::class, 'update'])->name('indicador-update');
 
         //Gestão de Usuários e Permissões
         Route::resource('users', App\Http\Controllers\UserController::class)->middleware('permission:user-list');

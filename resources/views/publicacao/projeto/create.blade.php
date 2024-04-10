@@ -10,7 +10,7 @@
 
 <p class="form-legenda"><em>Campos com (*) são obrigatórios</em></p>
 <div class="row containerTabela justify-content-center">
-    {{ html()->form('POST', route('projeto-store'))->open() }}
+    {{ html()->form('POST', route('projeto-store'), 'files')->acceptsFiles()->open() }}
     <div class="row">
         <div class="form-group required col-md-8 mb-3">
             <label for="nome" class="form-label control-label">Nome:</label>
@@ -31,7 +31,7 @@
         </div>
         <div class="col-md-3 mb-3">
             <label for="imagem" class="form-label">Imagem do projeto:</label>
-            <input class="form-control" type="file" id="imagem">
+            <input class="form-control" type="file" id="imagem" name="imagem" accept=".png,.jpg,.jpeg,.gif">
         </div>
         <div class="form-group required col-md-2 mb-3">
             <label for="ativo" class="form-label control-label">Publicado:</label>

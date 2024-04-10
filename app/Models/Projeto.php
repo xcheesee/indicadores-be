@@ -16,4 +16,11 @@ class Projeto extends Model
     {
         return $this->belongsTo(Departamento::class);
     }
+
+    public function getImagemUrlAttribute()
+    {
+        if($this->imagem){
+            return asset("/storage/".$this->imagem);
+        }
+    }
 }

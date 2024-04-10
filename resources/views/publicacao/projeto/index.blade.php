@@ -1,7 +1,7 @@
 @extends('layouts.base')
 
 @section('cabecalho')
-    @include('layouts.cabecalho', ['titulo' => 'Projeto', 'rota' => 'home'])
+    @include('layouts.cabecalho', ['titulo' => 'Projeto', 'rota' => 'publicacao'])
 @endsection
 
 @section('conteudo')

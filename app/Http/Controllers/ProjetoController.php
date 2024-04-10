@@ -7,6 +7,7 @@ use App\Models\Departamento;
 use App\Models\Projeto;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Storage;
 
 class ProjetoController extends Controller
 {
@@ -48,12 +49,22 @@ class ProjetoController extends Controller
 
     public function store(StoreProjetoRequest $request) 
     {   
+        if($request->hasFile('imagem')){
+            $upload = $request->file('imagem');
+            $extensao = $upload->extension();
+
+            $arquivo = $upload->storeAs('imagens', 'projeto_'.$request->nome.'.'.$extensao);
+            $projeto_imagem['imagem'] = $arquivo;
+        }
+
+        $imagem = $projeto_imagem['imagem'];
+        // dd($imagem);
         DB::beginTransaction();
         $projeto = Projeto::create([
             'nome' => $request->nome,
             'descricao' => $request->descricao,
             'departamento_id' => $request->departamento_id,
-            'imagem' => 'Sem Imagem',
+            'imagem' => $imagem,
             'ativo' => $request->ativo,
         ]);
         DB::commit();
@@ -90,6 +101,18 @@ class ProjetoController extends Controller
         $projeto->departamento_id = $request->departamento_id;
         // $projeto->imagem = $request->nome;
         $projeto->ativo = $request->ativo;
+
+        if($request->hasFile('imagem')){  
+            Storage::delete(['projeto_'.$request->nome]);
+
+            $upload = $request->file('imagem');
+            $extensao = $upload->extension();
+
+            $arquivo = $upload->storeAs('imagens', 'projeto_'.$projeto->nome.'.'.$extensao);
+            $projeto_imagem['imagem'] = $arquivo;
+
+            $projeto->imagem = $projeto_imagem['imagem'];
+        }
 
         DB::beginTransaction();
         $projeto->save();
