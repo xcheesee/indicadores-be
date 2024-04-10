@@ -22,7 +22,7 @@
             <img src="{{ $projeto->imagem_url }}" class="img-thumbnail rounded object-fit-cover" alt="" style="max-height: 200px; max-width:200px;">
         </div>
         <div class="mb-2">
-            <b>Publicado:</b> @if ($projeto->ativo == false) Não @else Sim @endif
+            <b>Publicado:</b> @if ($projeto->visivel == false) Não @else Sim @endif
         </div>
         <div>
             <a class="btn btn-primary" href="{{ route('projeto-edit', $projeto->id) }}">Editar</a>

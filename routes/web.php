@@ -73,14 +73,15 @@ Route::prefix(env('APP_FOLDER', ''))->group(function () { //considerando que o p
         Route::get('/publicacao/projeto/{id}/visualizar', [App\Http\Controllers\ProjetoController::class, 'show'])->name('projeto-show');
         Route::get('/publicacao/projeto/{id}/editar', [App\Http\Controllers\ProjetoController::class, 'edit'])->name('projeto-edit');
         Route::post('/projeto/{id}/editar', [App\Http\Controllers\ProjetoController::class, 'update'])->name('projeto-update');
+        Route::get('/projeto/{id}/destroy', [App\Http\Controllers\ProjetoController::class, 'destroy'])->name('projeto-destroy');
 
         // Indicador
-        Route::get('/publicacao/indicadores', [App\Http\Controllers\ProjetoController::class, 'index'])->name('indicadores');
-        Route::get('/publicacao/indicador/novo', [App\Http\Controllers\ProjetoController::class, 'create'])->name('indicador-create');
-        Route::post('/indicador/criar', [App\Http\Controllers\ProjetoController::class, 'store'])->name('indicador-store');
-        Route::get('/publicacao/indicador/{id}/visualizar', [App\Http\Controllers\ProjetoController::class, 'show'])->name('indicador-show');
-        Route::get('/publicacao/indicador/{id}/editar', [App\Http\Controllers\ProjetoController::class, 'edit'])->name('indicador-edit');
-        Route::post('/indicador/{id}/editar', [App\Http\Controllers\ProjetoController::class, 'update'])->name('indicador-update');
+        Route::get('/publicacao/indicadores', [App\Http\Controllers\IndicadorController::class, 'index'])->name('indicadores');
+        Route::get('/publicacao/indicador/novo', [App\Http\Controllers\IndicadorController::class, 'create'])->name('indicador-create');
+        Route::post('/indicador/criar', [App\Http\Controllers\IndicadorController::class, 'store'])->name('indicador-store');
+        Route::get('/publicacao/indicador/{id}/visualizar', [App\Http\Controllers\IndicadorController::class, 'show'])->name('indicador-show');
+        Route::get('/publicacao/indicador/{id}/editar', [App\Http\Controllers\IndicadorController::class, 'edit'])->name('indicador-edit');
+        Route::post('/indicador/{id}/editar', [App\Http\Controllers\IndicadorController::class, 'update'])->name('indicador-update');
 
         //Gestão de Usuários e Permissões
         Route::resource('users', App\Http\Controllers\UserController::class)->middleware('permission:user-list');

@@ -37,9 +37,9 @@
             <input class="form-control" type="file" name="imagem" id="imagem">
         </div>
         <div class="form-group required col-md-2 mb-3">
-            <label for="ativo" class="control-label form-label">Publicado:</label>
-            <select class="form-select" name="ativo" id="ativo">
-                @if ($projeto->ativo == 0)
+            <label for="visivel" class="control-label form-label">Publicado:</label>
+            <select class="form-select" name="visivel" id="visivel">
+                @if ($projeto->visivel == 0)
                     <option value="0" selected>Não</option>
                     <option value="1">Sim</option>
                 @else

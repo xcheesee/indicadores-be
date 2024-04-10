@@ -16,7 +16,7 @@ class ProjetoController extends Controller
         $filtros = array();
         $filtros['nome'] = $request->query('nome');
         $filtros['departamento_id'] = $request->query('departamento_id');
-        $filtros['ativo'] = $request->query('ativo');
+        $filtros['visivel'] = $request->query('visivel');
 
         $data = Projeto::query()
             ->orderBy('id', 'ASC')
@@ -28,9 +28,10 @@ class ProjetoController extends Controller
             ->when($filtros['departamento_id'], function ($query, $val) {
                 return $query->where('projetos.departamento_id','like','%'.$val.'%');
             })
-            ->when($filtros['ativo'], function ($query, $val) {
-                return $query->where('projetos.ativo','like','%'.$val.'%');
+            ->when($filtros['visivel'], function ($query, $val) {
+                return $query->where('projetos.visivel','like','%'.$val.'%');
             })
+            ->where('projetos.ativo', '=', 1)
             ->paginate(10);
 
         $departamentos = Departamento::query()->where('ativo', '=', 1)->orderBy('nome')->get();
@@ -65,7 +66,7 @@ class ProjetoController extends Controller
             'descricao' => $request->descricao,
             'departamento_id' => $request->departamento_id,
             'imagem' => $imagem,
-            'ativo' => $request->ativo,
+            'visivel' => $request->visivel,
         ]);
         DB::commit();
 
@@ -100,7 +101,7 @@ class ProjetoController extends Controller
         $projeto->descricao = $request->descricao;
         $projeto->departamento_id = $request->departamento_id;
         // $projeto->imagem = $request->nome;
-        $projeto->ativo = $request->ativo;
+        $projeto->visivel = $request->visivel;
 
         if($request->hasFile('imagem')){  
             Storage::delete(['projeto_'.$request->nome]);
@@ -122,8 +123,14 @@ class ProjetoController extends Controller
         return redirect()->route('projeto-show', $projeto->id);
     }
 
-    public function destroy()
+    public function destroy(int $id, Request $request)
     {
+        $projeto = Projeto::find($id);
 
+        $projeto->ativo = 0;
+        $projeto->save();
+
+        $request->session()->flash('mensagem', "Projeto '{$projeto->nome}' removida com sucesso!");
+        return redirect()->route('projetos');
     }
 }

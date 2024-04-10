@@ -11,7 +11,7 @@
             <li class="list-group-item col-md-12 border-0">
                 <div class="list-group list-group-flush">
                     <a href="{{ route('projetos') }}" class="list-group-item list-group-item-action">Projetos</a>
-                    <a href="#" class="list-group-item list-group-item-action">Indicadores</a>
+                    <a href="{{ route('indicadores') }}" class="list-group-item list-group-item-action">Indicadores</a>
                     <a href="#" class="list-group-item list-group-item-action">Variáveis</a>
                     <a href="#" class="list-group-item list-group-item-action">Gráficos</a>
                 </div>

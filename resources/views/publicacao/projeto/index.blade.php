@@ -17,7 +17,7 @@
                 </div>
                 <div class="form-group col-md-4 mb-3">
                     <label for="departamento_id" class="form-label control-label">Unidade Responsável:</label>
-                    <select class="form-select" name="departamento_id" id="departamento_id" name="departamento_id">
+                    <select class="form-select" name="departamento_id" id="departamento_id">
                         <option value="" selected>Selecione o departamento</option>
                         @foreach ($departamentos as $dept)
                             @if ($filtros['departamento_id'] != $dept->id)
@@ -29,9 +29,9 @@
                     </select>
                 </div>
                 <div class="form-group col-md-4 mb-3">
-                    <label for="ativo" class="form-label control-label">Publicado:</label>
-                    <select class="form-select" name="ativo" id="ativo">
-                        @if (!$filtros['ativo'])
+                    <label for="visivel" class="form-label control-label">Publicado:</label>
+                    <select class="form-select" name="visivel" id="visivel">
+                        @if (!$filtros['visivel'])
                             <option value="0" selected>Não</option>
                             <option value="1">Sim</option>
                         @else
@@ -67,7 +67,7 @@
                     <td>{{ $projeto->nome }}</td>
                     <td>{{ $projeto->departamento->nome }}</td>
                     <td class="text-center">
-                        @if ($projeto->ativo == 0)
+                        @if ($projeto->visivel == 0)
                             <i class="fa-solid fa-circle-xmark text-danger" style="font-size: 1.3em"></i>
                         @else
                             <i class="fa-solid fa-circle-check text-success" style="font-size: 1.3em"></i>
@@ -80,11 +80,9 @@
                                 <a class="btn btn-primary" href="{{ route('projeto-edit', $projeto->id) }}"><i class="fas fa-edit"></i></a>
                             @endcan
                             @can('role-delete')
-                                {{-- {{ html()->form('DELETE', route('roles.destroy', $role->id))->attributes(['style'=>'display:inline','onsubmit'=>'return confirm("Tem certeza que deseja remover \''.$role->name.'\'?")'])->open() }} --}}
-                                <a class="btn btn-danger"><i class="far fa-trash-alt"></i></a>
-                                {{-- {{ html()->form('DELETE') }}
-                                {{ html()->button('<i class="far fa-trash-alt"></i>','submit')->class('btn btn-danger') }}
-                                {{ html()->form()->close() }} --}}
+                            <a class="btn btn-danger" href="{{ route('projeto-destroy',$projeto->id) }}" onclick="return confirm('Tem certeza que deseja remover este projeto?')">
+                                <i class="fas fa-trash-alt"></i>
+                            </a>
                             @endcan
                         </div>
                     </td>

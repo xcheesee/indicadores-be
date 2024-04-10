@@ -16,7 +16,7 @@ return new class extends Migration
             $table->string('nome');
             $table->text('descricao')->nullable();
             $table->foreignId('departamento_id')->constrained('departamentos');
-            $table->string('imagem', 100);
+            $table->string('imagem', 100)->nullable();
             $table->boolean('ativo')->default(1);
             $table->timestamps();
         });

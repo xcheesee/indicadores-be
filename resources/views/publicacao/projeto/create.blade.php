@@ -34,8 +34,8 @@
             <input class="form-control" type="file" id="imagem" name="imagem" accept=".png,.jpg,.jpeg,.gif">
         </div>
         <div class="form-group required col-md-2 mb-3">
-            <label for="ativo" class="form-label control-label">Publicado:</label>
-            <select class="form-select" name="ativo" id="ativo">
+            <label for="visivel" class="form-label control-label">Publicado:</label>
+            <select class="form-select" name="visivel" id="visivel">
                 <option value="0" selected>Não</option>
                 <option value="1">Sim</option>
             </select>
