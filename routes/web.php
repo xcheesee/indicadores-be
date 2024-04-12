@@ -38,7 +38,7 @@ Route::prefix(env('APP_FOLDER', ''))->group(function () { //considerando que o p
         Route::get('/cadaux', [App\Http\Controllers\HomeController::class, 'cadaux'])->name('cadaux');
         Route::get('/publicacao', [App\Http\Controllers\HomeController::class, 'publicacao'])->name('publicacao');
 
-        // Cadastros Auxiliares
+        // CADASTROS AUXILIARES
 
         // Departamento
         Route::get('/cadaux/departamento', [App\Http\Controllers\DepartamentoController::class, 'index'])->name('departamentos');
@@ -64,7 +64,13 @@ Route::prefix(env('APP_FOLDER', ''))->group(function () { //considerando que o p
         Route::post('/cadaux/regiao/{id}/editar', [App\Http\Controllers\RegiaoController::class, 'update'])->name('regiao-update');
         Route::get('/cadaux/regiao/{id}/apagar', [App\Http\Controllers\RegiaoController::class, 'destroy'])->name('regiao-destroy');
 
-        // Publicação
+        // Periodicidade
+        Route::get('/cadaux/periodicidades', [App\Http\Controllers\PeriodicidadeController::class, 'index'])->name('periodicidades');
+        Route::post('/cadaux/periodicidade/criar', [App\Http\Controllers\PeriodicidadeController::class, 'create'])->name('periodicidade-create');
+        Route::post('/cadaux/periodicidade/{id}/editar', [App\Http\Controllers\PeriodicidadeController::class, 'update'])->name('periodicidade-update');
+        Route::get('/cadaux/periodicidade/{id}/apagar', [App\Http\Controllers\PeriodicidadeController::class, 'destroy'])->name('periodicidade-destroy');
+
+        // PUBLICAÇÃO
 
         // Projeto
         Route::get('/publicacao/projeto', [App\Http\Controllers\ProjetoController::class, 'index'])->name('projetos');
@@ -82,6 +88,7 @@ Route::prefix(env('APP_FOLDER', ''))->group(function () { //considerando que o p
         Route::get('/publicacao/indicador/{id}/visualizar', [App\Http\Controllers\IndicadorController::class, 'show'])->name('indicador-show');
         Route::get('/publicacao/indicador/{id}/editar', [App\Http\Controllers\IndicadorController::class, 'edit'])->name('indicador-edit');
         Route::post('/indicador/{id}/editar', [App\Http\Controllers\IndicadorController::class, 'update'])->name('indicador-update');
+        Route::get('/indicador/{id}/destroy', [App\Http\Controllers\IndicadorController::class, 'destroy'])->name('indicador-destroy');
 
         //Gestão de Usuários e Permissões
         Route::resource('users', App\Http\Controllers\UserController::class)->middleware('permission:user-list');

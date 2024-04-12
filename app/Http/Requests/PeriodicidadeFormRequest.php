@@ -4,7 +4,7 @@ namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class StoreProjetoRequest extends FormRequest
+class PeriodicidadeFormRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -23,10 +23,7 @@ class StoreProjetoRequest extends FormRequest
     {
         return [
             'nome' => 'required',
-            'departamento' => 'required',
-            'descricao' => 'required',
-            'visivel' => 'required',
-            'imagem' => 'required_if:visivel,==,1',
+            'qtd_meses' => 'required'
         ];
     }
 
@@ -34,9 +31,6 @@ class StoreProjetoRequest extends FormRequest
     {
         return [
             'required' => 'O campo :attribute é obrigatório',
-            'descricao.required' => 'O campo descrição é obrigatório',
-            'imagem.required_if' => 'O campo imagem é obrigatório',
-            'visivel.required' => 'O campo publicado é obrigatório',
         ];
     }
 }

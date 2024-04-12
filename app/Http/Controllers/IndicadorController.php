@@ -2,42 +2,158 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\IndicadorFormRequest;
+use App\Models\Departamento;
+use App\Models\Fonte;
+use App\Models\Indicador;
+use App\Models\Periodicidade;
+use App\Models\Projeto;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Storage;
 
 class IndicadorController extends Controller
 {
     public function index(Request $request)
     {
+        $filtros = array();
+        $filtros['nome'] = $request->query('nome');
+        $filtros['projeto_id'] = $request->query('projeto');
+        $filtros['departamento_id'] = $request->query('departamento');
+        $filtros['fonte_id'] = $request->query('fonte');
+
+        $data = Indicador::query()
+            ->orderBy('id', 'ASC')
+            ->select('indicadores.*')
+            ->leftJoin('departamentos', 'departamentos.id', '=', 'indicadores.departamento_id')
+            ->leftJoin('projetos', 'projetos.id', '=', 'indicadores.projeto_id')
+            ->leftJoin('fontes', 'fontes.id', '=', 'indicadores.fonte_id')
+            ->when($filtros['nome'], function ($query, $val){
+                return $query->where('indicadores.nome', 'like', '%'.$val.'%');
+            })
+            ->when($filtros['projeto_id'], function ($query, $val){
+                return $query->where('indicadores.projeto_id', 'like', '%'.$val.'%');
+            })
+            ->when($filtros['departamento_id'], function ($query, $val){
+                return $query->where('indicadores.departamento_id', 'like', '%'.$val.'%');
+            })
+            ->when($filtros['fonte_id'], function ($query, $val){
+                return $query->where('indicadores.fonte_id', 'like', '%'.$val.'%');
+            })
+            ->where('indicadores.ativo', '=', 1)
+            ->paginate(10);
+
+        $departamentos = Departamento::query()->where('ativo', '=', 1)->orderBy('nome')->get();
+        $projetos = Projeto::query()->where('ativo', '=', 1)->orderBy('nome')->get();
+        $fontes = Fonte::query()->where('ativo', '=', 1)->orderBy('nome')->get();
         $mensagem = $request->session()->get('mensagem');
         
-        return view('publicacao.indicadores.index', compact('mensagem'));
+        return view('publicacao.indicadores.index', compact('mensagem', 'departamentos', 'filtros', 'data', 'projetos', 'fontes'));
     }
 
     public function create(Request $request)
     {
+        $departamentos = Departamento::query()->where('ativo', '=', 1)->orderBy('nome')->get();
+        $projetos = Projeto::query()->where('ativo', '=', 1)->orderBy('nome')->get();
+        $fontes = Fonte::query()->where('ativo', '=', 1)->orderBy('nome')->get();
+        $periodicidades = Periodicidade::query()->where('ativo', '=', 1)->orderBy('nome')->get();
         $mensagem = $request->session()->get('mensagem');
         
-        return view('publicacao.indicadores.create', compact('mensagem'));
+        return view('publicacao.indicadores.create', compact('mensagem', 'projetos', 'fontes', 'departamentos', 'periodicidades'));
     }
 
-    public function store(Request $request)
+    public function store(IndicadorFormRequest $request)
     {
-        $mensagem = $request->session()->get('mensagem');
+        if($request->hasFile('imagem')){
+            $upload = $request->file('imagem');
+            $extensao = $upload->extension();
+
+            $arquivo = $upload->storeAs('imagens/indicador', 'indicador_'.$request->nome.'.'.$extensao);
+            $indicador_imagem['imagem'] = $arquivo;
+        }
+
+        $imagem = $indicador_imagem['imagem'];
+        DB::beginTransaction();
+        $indicador = Indicador::create([
+            'nome' => $request->nome,
+            'departamento_id' => $request->departamento,
+            'projeto_id' => $request->projeto,
+            'fonte_id' => $request->fonte,
+            'periodicidade_id' => $request->periodicidade,
+            'nota_tecnica' => $request->nota_tecnica,
+            'observacao' => $request->observacao,
+            'imagem' => $imagem,
+            'formula' => 'Sem Formula'
+        ]);
+        DB::commit();
         
-        return view('publicacao.indicadores.index', compact('mensagem'));
+        $request->session()->flash('mensagem', "Indicador '{$indicador->nome}' criada com sucesso!");
+        return redirect()->route('indicadores');
     }
 
-    public function edit(Request $request)
+    public function show(int $id, Request $request)
     {
+        $indicador = Indicador::findOrFail($id);
+        $projeto = Projeto::where('id', '=', $indicador->projeto_id)->first();
+        $departamento = Departamento::where('id', '=', $indicador->departamento_id)->first();
+        $fonte = Fonte::where('id', '=', $indicador->fonte_id)->first();
+        $periodicidade = Periodicidade::where('id', '=', $indicador->periodicidade_id)->first();
+        
         $mensagem = $request->session()->get('mensagem');
         
-        return view('publicacao.indicadores.index', compact('mensagem'));
+        return view('publicacao.indicadores.show', compact('mensagem', 'indicador', 'departamento', 'fonte', 'periodicidade', 'projeto'));
     }
 
-    public function update(Request $request)
+    public function edit(int $id, Request $request)
     {
+        $indicador = Indicador::findOrFail($id);
+        $departamentos = Departamento::query()->where('ativo', '=', 1)->orderBy('nome')->get();
+        $projetos = Projeto::query()->where('ativo', '=', 1)->orderBy('nome')->get();
+        $fontes = Fonte::query()->where('ativo', '=', 1)->orderBy('nome')->get();
+        $periodicidades = Periodicidade::query()->where('ativo', '=', 1)->orderBy('nome')->get();
         $mensagem = $request->session()->get('mensagem');
         
-        return view('publicacao.indicadores.index', compact('mensagem'));
+        return view('publicacao.indicadores.edit', compact('mensagem', 'indicador', 'departamentos', 'projetos', 'fontes', 'periodicidades'));
+    }
+
+    public function update(int $id, IndicadorFormRequest $request)
+    {
+        $indicador = Indicador::findOrFail($id);
+
+        if($request->hasFile('imagem')){  
+            Storage::delete(['projeto_'.$indicador->nome]);
+
+            $upload = $request->file('imagem');
+            $extensao = $upload->extension();
+
+            $arquivo = $upload->storeAs('imagens', 'projeto_'.$indicador->nome.'.'.$extensao);
+            $indicador_imagem['imagem'] = $arquivo;
+
+            $indicador->imagem = $indicador_imagem['imagem'];
+        }
+
+        $indicador->nome = $request->nome;
+        $indicador->departamento_id = $request->departamento;
+        $indicador->projeto_id = $request->projeto;
+        $indicador->fonte_id = $request->fonte;
+        $indicador->periodicidade_id = $request->periodicidade;
+        $indicador->nota_tecnica = $request->nota_tecnica;
+        $indicador->observacao = $request->observacao;
+
+        $indicador->save();
+        
+        $request->session()->flash('mensagem',"Indicador '{$indicador->nome}' (ID {$indicador->id}) editado com sucesso!");
+        return redirect()->route('indicadores', $indicador->id);
+    }
+
+    public function destroy(int $id, Request $request)
+    {
+        $indicador = Indicador::find($id);
+
+        $indicador->ativo = 0;
+        $indicador->save();
+        
+        $request->session()->flash('mensagem', "Indicador '{$indicador->nome}' removido com sucesso!");
+        return redirect()->route('indicadores');
     }
 }

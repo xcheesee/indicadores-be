@@ -15,7 +15,7 @@ class ProjetoController extends Controller
     {
         $filtros = array();
         $filtros['nome'] = $request->query('nome');
-        $filtros['departamento_id'] = $request->query('departamento_id');
+        $filtros['departamento_id'] = $request->query('departamento');
         $filtros['visivel'] = $request->query('visivel');
 
         $data = Projeto::query()
@@ -43,7 +43,7 @@ class ProjetoController extends Controller
     public function create(Request $request)
     {
         $mensagem = $request->session()->get('mensagem');
-        $departamentos = Departamento::query()->where('ativo', '=', 1)->orderBy('id')->get();
+        $departamentos = Departamento::query()->where('ativo', '=', 1)->orderBy('nome')->get();
 
         return view('publicacao.projeto.create', compact('mensagem', 'departamentos'));
     }
@@ -64,7 +64,7 @@ class ProjetoController extends Controller
         $projeto = Projeto::create([
             'nome' => $request->nome,
             'descricao' => $request->descricao,
-            'departamento_id' => $request->departamento_id,
+            'departamento_id' => $request->departamento,
             'imagem' => $imagem,
             'visivel' => $request->visivel,
         ]);
@@ -74,7 +74,7 @@ class ProjetoController extends Controller
         return redirect()->route('projetos');
     }
 
-    public function show($id, Request $request)
+    public function show(int $id, Request $request)
     {
         $projeto = Projeto::findOrFail($id);
         $departamento = Departamento::where('id', '=', $projeto->departamento_id)->first();
@@ -84,27 +84,21 @@ class ProjetoController extends Controller
         return view('publicacao.projeto.show', compact('mensagem', 'projeto', 'departamento'));
     }
 
-    public function edit($id)
+    public function edit(int $id)
     {
         $projeto = Projeto::findOrFail($id);
-        $departamentos = Departamento::query()->where('ativo', '=', 1)->orderBy('id')->get();
+        $departamentos = Departamento::query()->where('ativo', '=', 1)->orderBy('nome')->get();
 
         
         return view('publicacao.projeto.edit', compact('projeto', 'departamentos'));
     }
 
-    public function update($id, StoreProjetoRequest $request)
+    public function update(int $id, StoreProjetoRequest $request)
     {
         $projeto = Projeto::findOrFail($id);
 
-        $projeto->nome = $request->nome;
-        $projeto->descricao = $request->descricao;
-        $projeto->departamento_id = $request->departamento_id;
-        // $projeto->imagem = $request->nome;
-        $projeto->visivel = $request->visivel;
-
         if($request->hasFile('imagem')){  
-            Storage::delete(['projeto_'.$request->nome]);
+            Storage::delete(['projeto_'.$projeto->nome]);
 
             $upload = $request->file('imagem');
             $extensao = $upload->extension();
@@ -114,6 +108,12 @@ class ProjetoController extends Controller
 
             $projeto->imagem = $projeto_imagem['imagem'];
         }
+
+        $projeto->nome = $request->nome;
+        $projeto->descricao = $request->descricao;
+        $projeto->departamento_id = $request->departamento;
+        // $projeto->imagem = $request->nome;
+        $projeto->visivel = $request->visivel;
 
         DB::beginTransaction();
         $projeto->save();

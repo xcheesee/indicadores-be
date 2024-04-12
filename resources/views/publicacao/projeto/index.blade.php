@@ -16,8 +16,8 @@
                     <input type="text" class="form-control" id="nome" name="nome" value="{{$filtros['nome']}}">
                 </div>
                 <div class="form-group col-md-4 mb-3">
-                    <label for="departamento_id" class="form-label control-label">Unidade Responsável:</label>
-                    <select class="form-select" name="departamento_id" id="departamento_id">
+                    <label for="departamento" class="form-label control-label">Unidade Responsável:</label>
+                    <select class="form-select" name="departamento" id="departamento">
                         <option value="" selected>Selecione o departamento</option>
                         @foreach ($departamentos as $dept)
                             @if ($filtros['departamento_id'] != $dept->id)

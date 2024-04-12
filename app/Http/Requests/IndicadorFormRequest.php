@@ -11,7 +11,7 @@ class IndicadorFormRequest extends FormRequest
      */
     public function authorize(): bool
     {
-        return false;
+        return true;
     }
 
     /**
@@ -22,7 +22,23 @@ class IndicadorFormRequest extends FormRequest
     public function rules(): array
     {
         return [
-            //
+            'nome' => 'required',
+            'departamento' => 'required',
+            'projeto' => 'required',
+            'fonte' => 'required',
+            'periodicidade' => 'required',
+            'imagem' => 'required'
+        ];
+    }
+
+    public function messages()
+    {
+        return [
+            'required' => 'O campo :attribute é obrigatório',
+            'departamento.required' => 'O campo departamento é obrigatório',
+            'projeto.required' => 'O campo projeto é obrigatório',
+            'fonte.required' => 'O campo fonte é obrigatório',
+            'periodicidade.required' => 'O campo periodicidade é obrigatório',
         ];
     }
 }

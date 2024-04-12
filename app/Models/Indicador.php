@@ -32,4 +32,11 @@ class Indicador extends Model
         return $this->belongsTo(Periodicidade::class);
     }
 
+    public function getImagemUrlAttribute()
+    {
+        if($this->imagem){
+            return asset("/storage/".$this->imagem);
+        }
+    }
+
 }

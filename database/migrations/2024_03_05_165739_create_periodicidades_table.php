@@ -14,7 +14,7 @@ return new class extends Migration
         Schema::create('periodicidades', function (Blueprint $table) {
             $table->id();
             $table->string('nome', 45);
-            $table->integer('qtd_meses');
+            $table->integer('qtd_meses')->default(1);
             $table->boolean('ativo')->default(1);
             $table->timestamps();
         });

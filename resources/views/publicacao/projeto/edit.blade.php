@@ -1,11 +1,12 @@
 @extends('layouts.base')
 
 @section('cabecalho')
-    @include('layouts.cabecalho', ['titulo' => 'Editar Projeto ' . $projeto->nome, 'rota' => 'projetos'])
+    @include('layouts.cabecalho', ['titulo' => 'Editar Projeto: ' . $projeto->nome, 'rota' => 'projetos'])
 @endsection
 
 @section('conteudo')
 {{-- @include('layouts.mensagem', ['mensagem' => $mensagem]) --}}
+@include('layouts.erros', ['errors' => $errors])
 
 <p class="form-legenda"><em>Campos com (*) são obrigatórios</em></p>
 <div class="row containerTabela justify-content-center">
@@ -16,8 +17,8 @@
             <input type="text" class="form-control" id="nome" name="nome" value="{{ $projeto->nome }}">
         </div>
         <div class="form-group required col-md-4 mb-3">
-            <label for="departamento_id" class="control-label form-label">Departamento:</label>
-            <select class="form-select" name="departamento_id" id="departamento_id" name="departamento_id">
+            <label for="departamento" class="control-label form-label">Departamento:</label>
+            <select class="form-select" name="departamento" id="departamento">
                 <option value="" selected>Selecione o departamento</option>
                 @foreach ($departamentos  as $dept)
                     @if ($projeto->departamento_id != $dept->id)
@@ -35,6 +36,7 @@
         <div class="col-md-3 mb-3">
             <label for="imagem" class="form-label">Imagem do projeto:</label>
             <input class="form-control" type="file" name="imagem" id="imagem">
+            <input type="text" value="{{ $projeto->imagem }}" name="imagem" id="imagem" hidden>
         </div>
         <div class="form-group required col-md-2 mb-3">
             <label for="visivel" class="control-label form-label">Publicado:</label>
@@ -51,6 +53,7 @@
     </div>
     <div class="text-center">
         <button type="submit" class="btn btn-primary">Editar</button>
+        <a href="{{ route('projetos') }}" class="btn btn-outline-info">Cancelar</a>
     </div>
     {{ html()->form()->close() }}
 </div>

@@ -10,5 +10,5 @@ class Periodicidade extends Model
     use HasFactory;
 
     protected $table = 'periodicidades';
-    protected $fillable = ['nome', ' qtd_meses', 'ativo'];
+    protected $fillable = ['nome', 'qtd_meses', 'ativo'];
 }

@@ -1,7 +1,7 @@
 @extends('layouts.base')
 
 @section('cabecalho')
-    @include('layouts.cabecalho', ['titulo' => 'Novo Indicador', 'rota' => 'publicacao'])
+    @include('layouts.cabecalho', ['titulo' => 'Novo Indicador', 'rota' => 'indicadores'])
 @endsection
 
 @section('conteudo')
@@ -17,39 +17,39 @@
             <input type="text" class="form-control" id="nome" name="nome">
         </div>
         <div class="form-group required col-md-4 mb-3">
-            <label for="departamento_id" class="form-label control-label">Departamento:</label>
-            <select class="form-select" name="departamento_id" id="departamento_id">
-                <option value="" selected>Selecione o departamento</option>
-                {{-- @foreach ($departamentos as $dept)
+            <label for="departamento" class="form-label control-label">Coordenação Responsável:</label>
+            <select class="form-select" name="departamento" id="departamento">
+                <option value="" selected>Selecione a Coordenação Responsável</option>
+                @foreach ($departamentos as $dept)
                     <option value="{{ $dept->id }}">{{ $dept->sigla }}</option>  
-                @endforeach --}}
+                @endforeach
             </select>
         </div>
         <div class="form-group required col-md-4 mb-3">
-            <label for="projeto_id" class="form-label control-label">Projeto:</label>
-            <select class="form-select" name="projeto_id" id="projeto_id">
-                <option value="" selected>Selecione o projeto</option>
-                {{-- @foreach ($departamentos as $dept)
-                    <option value="{{ $dept->id }}">{{ $dept->sigla }}</option>  
-                @endforeach --}}
+            <label for="projeto" class="form-label control-label">Projeto:</label>
+            <select class="form-select" name="projeto" id="projeto">
+                <option value="" selected>Selecione o Projeto</option>
+                @foreach ($projetos as $projeto)
+                    <option value="{{ $projeto->id }}">{{ $projeto->nome }}</option>  
+                @endforeach
             </select>
         </div>
         <div class="form-group required col-md-4 mb-3">
-            <label for="fonte_id" class="form-label control-label">Fonte:</label>
-            <select class="form-select" name="fonte_id" id="fonte_id">
-                <option value="" selected>Selecione a fonte</option>
-                {{-- @foreach ($departamentos as $dept)
-                    <option value="{{ $dept->id }}">{{ $dept->sigla }}</option>  
-                @endforeach --}}
+            <label for="fonte" class="form-label control-label">Fonte:</label>
+            <select class="form-select" name="fonte" id="fonte">
+                <option value="" selected>Selecione a Fonte</option>
+                @foreach ($fontes as $fonte)
+                    <option value="{{ $fonte->id }}">{{ $fonte->nome }}</option>  
+                @endforeach
             </select>
         </div>
         <div class="form-group required col-md-4 mb-3">
-            <label for="periodicidade_id" class="form-label control-label">Periodicidade:</label>
-            <select class="form-select" name="periodicidade_id" id="periodicidade_id">
-                <option value="" selected>Selecione o periodicidade</option>
-                {{-- @foreach ($departamentos as $dept)
-                    <option value="{{ $dept->id }}">{{ $dept->sigla }}</option>  
-                @endforeach --}}
+            <label for="periodicidade" class="form-label control-label">Periodicidade:</label>
+            <select class="form-select" name="periodicidade" id="periodicidade">
+                <option value="" selected>Selecione o Periodicidade</option>
+                @foreach ($periodicidades as $periodicidade)
+                    <option value="{{ $periodicidade->id }}">{{ $periodicidade->nome }}</option>  
+                @endforeach
             </select>
         </div>
         <div class="col-md-12 mb-3">
@@ -67,6 +67,7 @@
     </div>
     <div class="text-center">
         <button type="submit" class="btn btn-primary">Criar</button>
+        <a href="{{ route('indicadores') }}" class="btn btn-outline-info">Cancelar</a>
     </div>
     {{ html()->form()->close() }}
 </div>

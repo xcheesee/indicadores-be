@@ -14,6 +14,7 @@
                     <a href="{{ route('fontes') }}" class="list-group-item list-group-item-action">Fontes</a>
                     <a href="{{ route('tipo_regioes') }}" class="list-group-item list-group-item-action">Tipo das Regiões</a>
                     <a href="{{ route('regioes') }}" class="list-group-item list-group-item-action">Regiões</a>
+                    <a href="{{ route('periodicidades') }}" class="list-group-item list-group-item-action">Periodicidades</a>
                 </div>
             </li>
         </ul>

@@ -17,8 +17,8 @@
             <input type="text" class="form-control" id="nome" name="nome">
         </div>
         <div class="form-group required col-md-4 mb-3">
-            <label for="departamento_id" class="form-label control-label">Departamento:</label>
-            <select class="form-select" name="departamento_id" id="departamento_id" name="departamento_id">
+            <label for="departamento" class="form-label control-label">Departamento:</label>
+            <select class="form-select" name="departamento" id="departamento">
                 <option value="" selected>Selecione o departamento</option>
                 @foreach ($departamentos as $dept)
                     <option value="{{ $dept->id }}">{{ $dept->sigla }}</option>  
@@ -43,6 +43,7 @@
     </div>
     <div class="text-center">
         <button type="submit" class="btn btn-primary">Criar</button>
+        <a href="{{ route('projetos') }}" class="btn btn-outline-info">Cancelar</a>
     </div>
     {{ html()->form()->close() }}
 </div>
