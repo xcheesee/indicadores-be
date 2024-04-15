@@ -68,7 +68,8 @@ class IndicadorController extends Controller
             $upload = $request->file('imagem');
             $extensao = $upload->extension();
 
-            $arquivo = $upload->storeAs('imagens/indicador', 'indicador_'.$request->nome.'.'.$extensao);
+            $nome_imagem_formatado = preg_replace('/( )+/', '_', mb_strtolower($request->nome));
+            $arquivo = $upload->storeAs('imagens/indicador', 'indicador_'.$nome_imagem_formatado.'.'.$extensao);
             $indicador_imagem['imagem'] = $arquivo;
         }
 
@@ -121,12 +122,13 @@ class IndicadorController extends Controller
         $indicador = Indicador::findOrFail($id);
 
         if($request->hasFile('imagem')){  
-            Storage::delete(['projeto_'.$indicador->nome]);
+            $nome_imagem_formatado = preg_replace('/( )+/', '_', mb_strtolower($indicador->nome));
+            Storage::delete(['projeto_'.$nome_imagem_formatado]);
 
             $upload = $request->file('imagem');
             $extensao = $upload->extension();
 
-            $arquivo = $upload->storeAs('imagens', 'projeto_'.$indicador->nome.'.'.$extensao);
+            $arquivo = $upload->storeAs('imagens', 'projeto_'.$nome_imagem_formatado.'.'.$extensao);
             $indicador_imagem['imagem'] = $arquivo;
 
             $indicador->imagem = $indicador_imagem['imagem'];

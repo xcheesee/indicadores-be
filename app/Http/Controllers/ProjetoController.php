@@ -54,7 +54,8 @@ class ProjetoController extends Controller
             $upload = $request->file('imagem');
             $extensao = $upload->extension();
 
-            $arquivo = $upload->storeAs('imagens', 'projeto_'.$request->nome.'.'.$extensao);
+            $nome_imagem_formatado = preg_replace('/( )+/', '_', mb_strtolower($request->nome));
+            $arquivo = $upload->storeAs('imagens', 'projeto_'.$nome_imagem_formatado.'.'.$extensao);
             $projeto_imagem['imagem'] = $arquivo;
         }
 
@@ -71,7 +72,7 @@ class ProjetoController extends Controller
         DB::commit();
 
         $request->session()->flash('mensagem', "Projeto '{$projeto->nome}' criada com sucesso!");
-        return redirect()->route('projetos');
+        return redirect()->route('projetos'); 
     }
 
     public function show(int $id, Request $request)
@@ -97,13 +98,14 @@ class ProjetoController extends Controller
     {
         $projeto = Projeto::findOrFail($id);
 
-        if($request->hasFile('imagem')){  
-            Storage::delete(['projeto_'.$projeto->nome]);
+        if($request->hasFile('imagem')){ 
+            $nome_imagem_formatado = preg_replace('/( )+/', '_', mb_strtolower($projeto->nome)); 
+            Storage::delete(['projeto_'.$nome_imagem_formatado]);
 
             $upload = $request->file('imagem');
             $extensao = $upload->extension();
 
-            $arquivo = $upload->storeAs('imagens', 'projeto_'.$projeto->nome.'.'.$extensao);
+            $arquivo = $upload->storeAs('imagens', 'projeto_'.$nome_imagem_formatado.'.'.$extensao);
             $projeto_imagem['imagem'] = $arquivo;
 
             $projeto->imagem = $projeto_imagem['imagem'];

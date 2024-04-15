@@ -102,6 +102,15 @@ Route::prefix(env('APP_FOLDER', ''))->group(function () { //considerando que o p
         Route::post('/indicador/{id}/editar', [App\Http\Controllers\IndicadorController::class, 'update'])->name('indicador-update');
         Route::get('/indicador/{id}/destroy', [App\Http\Controllers\IndicadorController::class, 'destroy'])->name('indicador-destroy');
 
+        // Variavel
+        Route::get('/publicacao/variaveis', [App\Http\Controllers\VariavelController::class, 'index'])->name('variaveis');
+        Route::get('/publicacao/variavel/novo', [App\Http\Controllers\VariavelController::class, 'create'])->name('variavel-create');
+        Route::post('/variavel/criar', [App\Http\Controllers\VariavelController::class, 'store'])->name('variavel-store');
+        Route::get('/publicacao/variavel/{id}/visualizar', [App\Http\Controllers\VariavelController::class, 'show'])->name('variavel-show');
+        Route::get('/publicacao/variavel/{id}/editar', [App\Http\Controllers\VariavelController::class, 'edit'])->name('variavel-edit');
+        Route::post('/variavel/{id}/editar', [App\Http\Controllers\VariavelController::class, 'update'])->name('variavel-update');
+        Route::get('/variavel/{id}/destroy', [App\Http\Controllers\VariavelController::class, 'destroy'])->name('variavel-destroy');
+
         //Gestão de Usuários e Permissões
         Route::resource('users', App\Http\Controllers\UserController::class)->middleware('permission:user-list');
         Route::resource('roles', App\Http\Controllers\RoleController::class)->middleware('permission:role-list');
