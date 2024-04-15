@@ -70,6 +70,18 @@ Route::prefix(env('APP_FOLDER', ''))->group(function () { //considerando que o p
         Route::post('/cadaux/periodicidade/{id}/editar', [App\Http\Controllers\PeriodicidadeController::class, 'update'])->name('periodicidade-update');
         Route::get('/cadaux/periodicidade/{id}/apagar', [App\Http\Controllers\PeriodicidadeController::class, 'destroy'])->name('periodicidade-destroy');
 
+        // Tipo de Dado
+        Route::get('/cadaux/tipo_dados', [App\Http\Controllers\TipoDadoController::class, 'index'])->name('tipo_dados');
+        Route::post('/cadaux/tipo_dado/criar', [App\Http\Controllers\TipoDadoController::class, 'create'])->name('tipo_dado-create');
+        Route::post('/cadaux/tipo_dado/{id}/editar', [App\Http\Controllers\TipoDadoController::class, 'update'])->name('tipo_dado-update');
+        Route::get('/cadaux/tipo_dado/{id}/apagar', [App\Http\Controllers\TipoDadoController::class, 'destroy'])->name('tipo_dado-destroy');
+
+        // Tipo de Medida
+        Route::get('/cadaux/medidas', [App\Http\Controllers\TipoMedidaController::class, 'index'])->name('medidas');
+        Route::post('/cadaux/medida/criar', [App\Http\Controllers\TipoMedidaController::class, 'create'])->name('medida-create');
+        Route::post('/cadaux/medida/{id}/editar', [App\Http\Controllers\TipoMedidaController::class, 'update'])->name('medida-update');
+        Route::get('/cadaux/medida/{id}/apagar', [App\Http\Controllers\TipoMedidaController::class, 'destroy'])->name('medida-destroy');
+
         // PUBLICAÇÃO
 
         // Projeto

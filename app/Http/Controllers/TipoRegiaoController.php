@@ -26,7 +26,7 @@ class TipoRegiaoController extends Controller
         ]);
         DB::commit();
 
-        $request->session()->flash('mensagem', "Fonte {$tipoRegiao->nome} criada com sucesso");
+        $request->session()->flash('mensagem', "Tipo de Região {$tipoRegiao->nome} criada com sucesso");
         return redirect()->route('tipo_regioes');
     }
 
@@ -37,7 +37,7 @@ class TipoRegiaoController extends Controller
         $tipoRegiao->sigla = $request->sigla;
         $tipoRegiao->save();
 
-        $request->session()->flash('mensagem', "Fonte {$tipoRegiao->nome} atualizada com sucesso");
+        $request->session()->flash('mensagem', "Tipo de Região {$tipoRegiao->nome} atualizada com sucesso");
         return redirect()->route('tipo_regioes');
     }
 
@@ -48,7 +48,7 @@ class TipoRegiaoController extends Controller
         $tipoRegiao->ativo = 0;
         $tipoRegiao->save();
 
-        $request->session()->flash('mensagem', "Fonte '{$tipoRegiao->nome}' removida com sucesso!");
+        $request->session()->flash('mensagem', "Tipo de Região '{$tipoRegiao->nome}' removida com sucesso!");
         return redirect()->route('tipo_regioes');
     }
 }

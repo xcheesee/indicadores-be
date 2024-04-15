@@ -15,6 +15,8 @@
                     <a href="{{ route('tipo_regioes') }}" class="list-group-item list-group-item-action">Tipo das Regiões</a>
                     <a href="{{ route('regioes') }}" class="list-group-item list-group-item-action">Regiões</a>
                     <a href="{{ route('periodicidades') }}" class="list-group-item list-group-item-action">Periodicidades</a>
+                    <a href="{{ route('tipo_dados') }}" class="list-group-item list-group-item-action">Tipo de Dados</a>
+                    <a href="{{ route('medidas') }}" class="list-group-item list-group-item-action">Tipo de Medidas</a>
                 </div>
             </li>
         </ul>
