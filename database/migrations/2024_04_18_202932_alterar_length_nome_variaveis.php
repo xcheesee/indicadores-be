@@ -15,11 +15,6 @@ return new class extends Migration
             //
             $table->string('nome',60)->change();
         });
-
-        Schema::table('valores', function (Blueprint $table) {
-            //
-            $table->string('nome',60)->change();
-        });
     }
 
     /**
@@ -28,11 +23,6 @@ return new class extends Migration
     public function down(): void
     {
         Schema::table('variaveis', function (Blueprint $table) {
-            //
-            $table->string('nome',45)->change();
-        });
-
-        Schema::table('valores', function (Blueprint $table) {
             //
             $table->string('nome',45)->change();
         });
