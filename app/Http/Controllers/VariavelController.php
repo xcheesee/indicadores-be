@@ -5,8 +5,12 @@ namespace App\Http\Controllers;
 use App\Http\Requests\VariavelRequest;
 use App\Models\Departamento;
 use App\Models\Fonte;
+use App\Models\Metadado;
+use App\Models\Regiao;
 use App\Models\TipoDado;
+use App\Models\TipoMedida;
 use App\Models\Variavel;
+use App\Models\VariavelValor;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
@@ -14,29 +18,38 @@ class VariavelController extends Controller
 {
     public function index(Request $request)
     {
-        // $filtros = array();
-        // $filtros['nome'] = $request->query('nome');
-        // $filtros['departamento_id'] = $request->query('departamento');
-        // $filtros['visivel'] = $request->query('visivel');
+        $filtros = array();
+        $filtros['nome'] = $request->query('nome');
+        $filtros['codigo'] = $request->query('codigo');
+        $filtros['departamento_id'] = $request->query('departamento');
+        $filtros['fonte_id'] = $request->query('fonte');
         
         $data = Variavel::query()
-            ->orderBy('id', 'ASC')
-            ->select('variavies.*')
+            ->orderBy('id', 'DESC')
+            ->select('variaveis.*')
             ->leftJoin('departamentos', 'departamentos.id', '=', 'variaveis.departamento_id')
-            // ->when($filtros['nome'], function ($query, $val) {
-            //     return $query->where('projetos.nome','like','%'.$val.'%');
-            // })
-            // ->when($filtros['departamento_id'], function ($query, $val) {
-            //     return $query->where('projetos.departamento_id','like','%'.$val.'%');
-            // })
-            // ->when($filtros['visivel'], function ($query, $val) {
-            //     return $query->where('projetos.visivel','like','%'.$val.'%');
-            // })
+            ->leftJoin('fontes', 'fontes.id', '=', 'variaveis.fonte_id')
+            ->leftJoin('tipo_dados', 'tipo_dados.id', '=', 'variaveis.tipo_dado_id')
+            ->when($filtros['nome'], function ($query, $val) {
+                return $query->where('variaveis.nome','like','%'.$val.'%');
+            })
+            ->when($filtros['codigo'], function ($query, $val) {
+                return $query->where('variaveis.codigo','like','%'.$val.'%');
+            })
+            ->when($filtros['departamento_id'], function ($query, $val) {
+                return $query->where('variaveis.departamento_id','like','%'.$val.'%');
+            })
+            ->when($filtros['fonte_id'], function ($query, $val) {
+                return $query->where('variaveis.fonte_id','like','%'.$val.'%');
+            })
             ->where('variaveis.ativo', '=', 1)
             ->paginate(10);
+
+        $departamentos = Departamento::query()->where('ativo', '=', 1)->orderBy('nome')->get();
+        $fontes = Fonte::query()->where('ativo', '=', 1)->orderBy('nome')->get();
         
         $mensagem = $request->session()->get('mensagem');
-        return view('publicacao.variaveis.index', compact('data','mensagem'));
+        return view('publicacao.variaveis.index', compact('data','mensagem','filtros','departamentos','fontes'));
     }
 
     public function create(Request $request)
@@ -45,15 +58,25 @@ class VariavelController extends Controller
         $departamentos = Departamento::query()->where('ativo', '=', 1)->orderBy('nome')->get();
         $tipo_dados = TipoDado::query()->where('ativo', '=', 1)->orderBy('nome')->get();
         $fontes = Fonte::query()->where('ativo', '=', 1)->orderBy('nome')->get();
+        $tipo_medidas = TipoMedida::query()->where('ativo', '=', 1)->orderBy('nome')->get();
 
-        return view('publicacao.variaveis.create', compact('mensagem', 'departamentos', 'tipo_dados', 'fontes'));
+        return view('publicacao.variaveis.create', compact('mensagem', 'departamentos', 'tipo_dados', 'fontes', 'tipo_medidas'));
     }
 
     public function store(VariavelRequest $request)
     {
         // dd($imagem);
         DB::beginTransaction();
-        $projeto = Variavel::create([
+        $metadados = Metadado::create([
+            'tipo_medida_id' => $request->tipo_medida,
+            'serie_historica_inicio' => $request->inicio_serie_historica,
+            'serie_historica_fim' => $request->fim_serie_historica,
+            'nota_tecnica' => $request->nota_tecnica,
+            'organizacao' => $request->organizacao,
+            'observacao' => $request->observacao,
+        ]);
+        
+        $variavel = Variavel::create([
             'codigo' => $request->codigo,
             'nome' => $request->nome,
             'departamento_id' => $request->departamento,
@@ -62,27 +85,92 @@ class VariavelController extends Controller
         ]);
         DB::commit();
 
-        $request->session()->flash('mensagem', "Variável '{$projeto->nome}' criada com sucesso!");
-        return redirect()->route('variavies');
+        
+        $variavel->metadados_id = $metadados->id;
+        DB::beginTransaction();
+        $variavel->save();
+        DB::commit();
+
+
+        $request->session()->flash('mensagem', "Variável '{$variavel->nome}' criada com sucesso!");
+        return redirect()->route('variaveis');
     }
 
     public function show(int $id, Request $request)
     {
+        // Info: Variáveis
+        $variavel = Variavel::findOrFail($id);
+        $departamento = Departamento::where('id', '=', $variavel->departamento_id)->first();
+        $metadados = Metadado::where('id', '=', $variavel->metadados_id)->first();
+        $fontes = Fonte::where('id', '=', $variavel->fonte_id)->first();
+        $tipo_dados = TipoDado::where('id', '=', $variavel->tipo_dado_id)->first();
+        $tipo_medida = TipoMedida::where('id', '=', $metadados->tipo_medida_id)->first();
 
+        // Info: Valor
+        $regioes = Regiao::query()->where('ativo', '=', 1)->orderBy('nome')->get();
+        $valores = VariavelValor::query()
+            ->orderBy('regioes.nome', 'ASC')
+            ->select('variavel_valores.*')
+            ->leftJoin('valores', 'valores.id', '=', 'variavel_valores.valor_id')
+            ->leftJoin('regioes', 'regioes.id', '=', 'valores.regiao_id')
+            ->where('variavel_valores.variavel_id', '=', $id)
+            ->where('valores.ativo', '=', 1)
+            ->get();
+        
+        $mensagem = $request->session()->get('mensagem');
+        
+        return view('publicacao.variaveis.show', compact('variavel', 'departamento', 'metadados', 'tipo_dados', 'fontes', 'tipo_medida', 'regioes', 'valores', 'mensagem'));
     }
 
     public function edit(int $id, Request $request)
     {
+        $variavel = Variavel::findOrFail($id);
+        $departamentos = Departamento::query()->where('ativo', '=', 1)->orderBy('nome')->get();
+        $tipo_dados = TipoDado::query()->where('ativo', '=', 1)->orderBy('nome')->get();
+        $fontes = Fonte::query()->where('ativo', '=', 1)->orderBy('nome')->get();
+        $metadados = Metadado::query()->where('id', '=', $variavel->id)->first();
+        $tipo_medidas = TipoMedida::query()->where('ativo', '=', 1)->orderBy('nome')->get();
 
+        $mensagem = $request->session()->get('mensagem');
+        
+        return view('publicacao.variaveis.edit', compact('variavel', 'departamentos', 'mensagem', 'tipo_dados', 'fontes', 'metadados', 'tipo_medidas'));
     }
 
     public function update(int $id, VariavelRequest $request)
     {
+        $variavel = Variavel::findOrFail($id);
+        $metadados = Metadado::find($variavel->metadados_id);
 
+        $variavel->nome = $request->nome;
+        $variavel->codigo = $request->codigo;
+        $variavel->departamento_id = $request->departamento;
+        $variavel->tipo_dado_id = $request->tipo_dado;
+        $variavel->fonte_id = $request->fonte;
+
+        $metadados->tipo_medida_id = $request->tipo_medida;
+        $metadados->serie_historica_inicio = $request->inicio_serie_historica;
+        $metadados->serie_historica_fim = $request->fim_serie_historica;
+        $metadados->nota_tecnica = $request->nota_tecnica;
+        $metadados->organizacao = $request->organizacao;
+        $metadados->observacao = $request->observacao;
+
+        DB::beginTransaction();
+        $variavel->save();
+        $metadados->save();
+        DB::commit();
+
+        $request->session()->flash('mensagem',"Variável '{$variavel->nome}' (ID {$variavel->id}) editado com sucesso!");
+        return redirect()->route('variaveis');
     }
 
     public function destroy(int $id, Request $request)
     {
+        $variavel = Variavel::find($id);
 
+        $variavel->ativo = 0;
+        $variavel->save();
+
+        $request->session()->flash('mensagem', "Variável '{$variavel->nome}' removida com sucesso!");
+        return redirect()->route('variaveis');
     }
 }

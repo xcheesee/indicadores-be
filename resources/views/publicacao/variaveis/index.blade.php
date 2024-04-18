@@ -9,16 +9,20 @@
 
 <div class="row containerTabela justify-content-center">
     <div class="row">
-        {{ html()->form('GET', route('projetos'))->open() }}
-            {{-- <div class="row">
-                <div class="form-group col-md-4 mb-3">
+        {{ html()->form('GET', route('variaveis'))->open() }}
+            <div class="row">
+                <div class="form-group col-md-3 mb-3">
+                    <label for="codigo" class="form-label control-label">Código:</label>
+                    <input type="text" class="form-control" id="codigo" name="codigo" value="{{$filtros['codigo']}}">
+                </div>
+                <div class="form-group col-md-3 mb-3">
                     <label for="nome" class="form-label control-label">Nome:</label>
                     <input type="text" class="form-control" id="nome" name="nome" value="{{$filtros['nome']}}">
                 </div>
-                <div class="form-group col-md-4 mb-3">
+                <div class="form-group col-md-3 mb-3">
                     <label for="departamento" class="form-label control-label">Unidade Responsável:</label>
                     <select class="form-select" name="departamento" id="departamento">
-                        <option value="" selected>Selecione o departamento</option>
+                        <option value="" selected>Selecione o Departamento</option>
                         @foreach ($departamentos as $dept)
                             @if ($filtros['departamento_id'] != $dept->id)
                                 <option value="{{ $dept->id }}">{{ $dept->sigla }} - {{ $dept->nome }}</option> 
@@ -28,59 +32,57 @@
                         @endforeach
                     </select>
                 </div>
-                <div class="form-group col-md-4 mb-3">
-                    <label for="visivel" class="form-label control-label">Publicado:</label>
-                    <select class="form-select" name="visivel" id="visivel">
-                        @if (!$filtros['visivel'])
-                            <option value="0" selected>Não</option>
-                            <option value="1">Sim</option>
-                        @else
-                            <option value="0">Não</option>
-                            <option value="1" selected>Sim</option>
-                        @endif
+                <div class="form-group col-md-3 mb-3">
+                    <label for="fonte" class="form-label control-label">Fonte:</label>
+                    <select class="form-select" name="fonte" id="fonte">
+                        <option value="" selected>Selecione a Fonte</option>
+                        @foreach ($fontes as $fonte)
+                            @if ($filtros['fonte_id'] != $fonte->id)
+                                <option value="{{ $fonte->id }}">{{ $fonte->nome }} - {{ $fonte->nome }}</option> 
+                            @else
+                                <option value="{{ $fonte->id }}" selected>{{ $fonte->nome }} - {{ $fonte->nome }}</option>
+                            @endif    
+                        @endforeach
                     </select>
                 </div>
-            </div> --}}
+            </div>
             <div class="d-flex justify-content-between">
                 <div>
                     <button type="submit" class="btn btn-primary"><i class="fas fa-filter"></i> Filtrar</button>
                 </div>
                 <div>
-                    <a class="btn btn-primary" href="{{ route('variavel-create') }}">Novo Projeto</a>
+                    <a class="btn btn-primary" href="{{ route('variavel-create') }}">Nova Variável</a>
                 </div>
             </div>
         {{ html()->form()->close() }}
         <table class="table">
             <thead class="thead-dark">
                 <tr>
-                    <th>ID</th>
-                    <th class="col-sm-3">Nome</th>
+                    <th>Código</th>
+                    <th>Nome</th>
                     <th>Responsável</th>
-                    <th class="text-center">Publicado</th>
+                    <th>Tipo do Dado</th>
+                    <th>Fonte</th>
                     <th>Ação</th>
                 </tr>
             </thead>
             <tbody class="align-middle">
-                @foreach ($data as $key => $projeto)
+                @foreach ($data as $key => $variavel)
                 <tr>
-                    <td>{{ $projeto->id }}</td>
-                    <td>{{ $projeto->nome }}</td>
-                    <td>{{ $projeto->departamento->nome }}</td>
-                    <td class="text-center">
-                        @if ($projeto->visivel == 0)
-                            <i class="fa-solid fa-circle-xmark text-danger" style="font-size: 1.3em"></i>
-                        @else
-                            <i class="fa-solid fa-circle-check text-success" style="font-size: 1.3em"></i>
-                        @endif
-                    </td>
+                    <td>{{ $variavel->codigo }}</td>
+                    <td>{{ $variavel->nome }}</td>
+                    <td>{{ $variavel->departamento->nome }}</td>
+                    <td>{{ $variavel->tipo_dado->nome }}</td>
+                    <td>{{ $variavel->fonte->nome }} ({{ $variavel->fonte->descricao }})</td>
                     <td>
                         <div>
-                            <a class="btn btn-primary" href="{{ route('projeto-show', $projeto->id) }}"><i class="far fa-eye"></i></a>
+                            <a class="btn btn-primary" href="{{ route('variavel-show', $variavel->id) }}"><i class="far fa-eye"></i></a>
                             @can('role-edit')
-                                <a class="btn btn-primary" href="{{ route('projeto-edit', $projeto->id) }}"><i class="fas fa-edit"></i></a>
+                                <a class="btn btn-primary" href="{{ route('variavel-edit', $variavel->id) }}"><i class="fas fa-edit"></i></a>
+                                {{-- <a class="btn btn-primary" href="{{ route('variavel-metadados', $projeto->id) }}"><i class="fa-regular fa-file-lines"></i></a> --}}
                             @endcan
                             @can('role-delete')
-                            <a class="btn btn-danger" href="{{ route('projeto-destroy',$projeto->id) }}" onclick="return confirm('Tem certeza que deseja remover este projeto?')">
+                            <a class="btn btn-danger" href="{{ route('variavel-destroy', $variavel->id) }}" onclick="return confirm('Tem certeza que deseja remover esta variável?')">
                                 <i class="fas fa-trash-alt"></i>
                             </a>
                             @endcan
@@ -93,5 +95,4 @@
         {{ $data->appends($_GET)->links() }}
     </div>
 </div>
-
 @endsection

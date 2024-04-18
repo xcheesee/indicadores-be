@@ -4,7 +4,7 @@ namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class VariavelRequest extends FormRequest
+class ValorFormRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -22,12 +22,9 @@ class VariavelRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'codigo' => 'required',
-            'nome' => 'required',
-            'departamento' => 'required',
-            'tipo_dado' => 'required',
-            'fonte' => 'required',
-            // 'metadados_id' => 'required'
+            'regiao' => 'required',
+            'periodo' => 'required',
+            'valor' => 'required',
         ];
     }
 
@@ -35,7 +32,8 @@ class VariavelRequest extends FormRequest
     {
         return [
             'required' => 'O campo :attribute é obrigatório',
-            'tipo_dado.required' => 'O campo tipo do dado é obrigatório',
+            'regiao.required' => 'O campo região é obrigatório',
+            'periodo.required' => 'O campo período é obrigatório',
         ];
     }
 }

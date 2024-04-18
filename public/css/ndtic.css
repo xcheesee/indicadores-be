@@ -26,7 +26,7 @@
 }
 
 .pagination > li > a{
-    color: #60C300 !important;
+    color: #0C4969 !important;
 }
 
 .pagination > .disabled > span {
@@ -45,8 +45,8 @@
 .pagination > .active > span,
 .pagination > .active > span:focus,
 .pagination > .active > span:hover {
-    background-color: #60C300 !important;
-    border-color: #60C300 !important;
+    background-color: #0C4969 !important;
+    border-color: #0C4969 !important;
 }
 
 #spinner-div {

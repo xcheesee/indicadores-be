@@ -110,6 +110,12 @@ Route::prefix(env('APP_FOLDER', ''))->group(function () { //considerando que o p
         Route::get('/publicacao/variavel/{id}/editar', [App\Http\Controllers\VariavelController::class, 'edit'])->name('variavel-edit');
         Route::post('/variavel/{id}/editar', [App\Http\Controllers\VariavelController::class, 'update'])->name('variavel-update');
         Route::get('/variavel/{id}/destroy', [App\Http\Controllers\VariavelController::class, 'destroy'])->name('variavel-destroy');
+        
+        // Valores
+        Route::get('/valores', [App\Http\Controllers\ValorController::class, 'index'])->name('valores');
+        Route::post('/valor/novo/variavel/{varivelId}', [App\Http\Controllers\ValorController::class, 'create'])->name('valor-create');
+        Route::post('/valor/{id}/editar/variavel/{variavelId}', [App\Http\Controllers\ValorController::class, 'update'])->name('valor-update');
+        Route::get('/valor/{id}/destroy/variavel/{variavelId}', [App\Http\Controllers\ValorController::class, 'destroy'])->name('valor-destroy');
 
         //Gestão de Usuários e Permissões
         Route::resource('users', App\Http\Controllers\UserController::class)->middleware('permission:user-list');
