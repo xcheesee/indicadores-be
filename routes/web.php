@@ -63,6 +63,7 @@ Route::prefix(env('APP_FOLDER', ''))->group(function () { //considerando que o p
         Route::post('/cadaux/regiao/criar', [App\Http\Controllers\RegiaoController::class, 'create'])->name('regiao-create');
         Route::post('/cadaux/regiao/{id}/editar', [App\Http\Controllers\RegiaoController::class, 'update'])->name('regiao-update');
         Route::get('/cadaux/regiao/{id}/apagar', [App\Http\Controllers\RegiaoController::class, 'destroy'])->name('regiao-destroy');
+        Route::get('/cadaux/regiao/{tipo_regiao}/filtrar', [App\Http\Controllers\RegiaoController::class, 'filtrar'])->name('regiao-filtrar');
 
         // Periodicidade
         Route::get('/cadaux/periodicidades', [App\Http\Controllers\PeriodicidadeController::class, 'index'])->name('periodicidades');

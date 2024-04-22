@@ -18,6 +18,7 @@
         $('.rf').mask('000000-0');
         $('.cpf').mask('000.000.000-00', {reverse: true});
         $('.money').mask('000.000.000.000.000,00', {reverse: true});
+        $('.codigo').mask('S#', {optional:true})
         //$('.mixed').mask('AAA 000-S0S'); //para exemplo de definição de custom masks
 
         $('.jmulti').multiSelect({

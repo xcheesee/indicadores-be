@@ -22,6 +22,19 @@
             <input type="text" class="form-control" id="nome" name="nome" value="{{ $variavel->nome }}">
         </div>
         <div class="form-group required col-md-4 mb-3">
+            <label for="indicador" class="form-label control-label">Indicador:</label>
+            <select class="form-select" name="indicador" id="indicador">
+                <option value="">Selecione o Indicador</option>
+                @foreach ($indicadores as $indicador)
+                    @if ($indicador->id != $indicador_variavel->indicador_id)
+                        <option value="{{ $indicador->id }}">{{ $indicador->nome }}</option> 
+                    @else
+                        <option value="{{ $indicador->id }}" selected>{{ $indicador->nome }}</option>  
+                    @endif
+                @endforeach
+            </select>
+        </div>
+        <div class="form-group required col-md-4 mb-3">
             <label for="departamento" class="form-label control-label">Departamento:</label>
             <select class="form-select" name="departamento" id="departamento">
                 <option value="">Selecione o Departamento</option>

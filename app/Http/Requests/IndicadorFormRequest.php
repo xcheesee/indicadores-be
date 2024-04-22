@@ -22,12 +22,12 @@ class IndicadorFormRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'nome' => 'required',
+            'nome' => 'required|unique',
             'departamento' => 'required',
             'projeto' => 'required',
             'fonte' => 'required',
             'periodicidade' => 'required',
-            'imagem' => 'required'
+            'imagem' => 'required|mimes:png,jpg,jpeg,gif',
         ];
     }
 
@@ -35,10 +35,12 @@ class IndicadorFormRequest extends FormRequest
     {
         return [
             'required' => 'O campo :attribute é obrigatório',
+            'nome.unique' => 'Este nome já existe',
             'departamento.required' => 'O campo departamento é obrigatório',
             'projeto.required' => 'O campo projeto é obrigatório',
             'fonte.required' => 'O campo fonte é obrigatório',
             'periodicidade.required' => 'O campo periodicidade é obrigatório',
+            'imagem.mimes' => 'Favor usar um arquivo de imagem válido (png, jpg, jpeg ou gif)',
         ];
     }
 }

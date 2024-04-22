@@ -5,10 +5,13 @@ namespace App\Http\Controllers;
 use App\Http\Requests\VariavelRequest;
 use App\Models\Departamento;
 use App\Models\Fonte;
+use App\Models\Indicador;
+use App\Models\IndicadorVariavel;
 use App\Models\Metadado;
 use App\Models\Regiao;
 use App\Models\TipoDado;
 use App\Models\TipoMedida;
+use App\Models\TipoRegiao;
 use App\Models\Variavel;
 use App\Models\VariavelValor;
 use Illuminate\Http\Request;
@@ -59,8 +62,9 @@ class VariavelController extends Controller
         $tipo_dados = TipoDado::query()->where('ativo', '=', 1)->orderBy('nome')->get();
         $fontes = Fonte::query()->where('ativo', '=', 1)->orderBy('nome')->get();
         $tipo_medidas = TipoMedida::query()->where('ativo', '=', 1)->orderBy('nome')->get();
+        $indicadores = Indicador::query()->where('ativo', '=', 1)->orderBy('nome')->get();
 
-        return view('publicacao.variaveis.create', compact('mensagem', 'departamentos', 'tipo_dados', 'fontes', 'tipo_medidas'));
+        return view('publicacao.variaveis.create', compact('mensagem', 'departamentos', 'tipo_dados', 'fontes', 'tipo_medidas', 'indicadores'));
     }
 
     public function store(VariavelRequest $request)
@@ -77,14 +81,18 @@ class VariavelController extends Controller
         ]);
         
         $variavel = Variavel::create([
-            'codigo' => $request->codigo,
+            'codigo' => strtoupper($request->codigo),
             'nome' => $request->nome,
             'departamento_id' => $request->departamento,
             'tipo_dado_id' => $request->tipo_dado,
             'fonte_id' => $request->fonte,
         ]);
-        DB::commit();
 
+        IndicadorVariavel::create([
+            'indicador_id' => $request->indicador,
+            'variavel_id' => $variavel->id,
+        ]);
+        DB::commit();
         
         $variavel->metadados_id = $metadados->id;
         DB::beginTransaction();
@@ -105,9 +113,16 @@ class VariavelController extends Controller
         $fontes = Fonte::where('id', '=', $variavel->fonte_id)->first();
         $tipo_dados = TipoDado::where('id', '=', $variavel->tipo_dado_id)->first();
         $tipo_medida = TipoMedida::where('id', '=', $metadados->tipo_medida_id)->first();
+        $indicador_variavel = IndicadorVariavel::where('variavel_id', '=', $id)->first();
+        $indicador = Indicador::where('id', '=', $indicador_variavel->indicador_id)->first();
 
         // Info: Valor
-        $regioes = Regiao::query()->where('ativo', '=', 1)->orderBy('nome')->get();
+        $regioes = Regiao::query()
+            ->select('regioes.*')
+            ->leftJoin('tipo_regioes', 'tipo_regioes.id', '=', 'regioes.tipo_regiao_id')
+            ->where('regioes.ativo', '=', 1)
+            ->orderBy('nome')
+            ->get();
         $valores = VariavelValor::query()
             ->orderBy('regioes.nome', 'ASC')
             ->select('variavel_valores.*')
@@ -116,10 +131,12 @@ class VariavelController extends Controller
             ->where('variavel_valores.variavel_id', '=', $id)
             ->where('valores.ativo', '=', 1)
             ->get();
+
+        $tipo_regiao = TipoRegiao::query()->where('ativo', '=', 1)->orderBy('nome')->get();
         
         $mensagem = $request->session()->get('mensagem');
         
-        return view('publicacao.variaveis.show', compact('variavel', 'departamento', 'metadados', 'tipo_dados', 'fontes', 'tipo_medida', 'regioes', 'valores', 'mensagem'));
+        return view('publicacao.variaveis.show', compact('variavel', 'departamento', 'metadados', 'tipo_dados', 'fontes', 'tipo_medida', 'regioes', 'valores', 'mensagem', 'indicador', 'tipo_regiao'));
     }
 
     public function edit(int $id, Request $request)
@@ -130,16 +147,19 @@ class VariavelController extends Controller
         $fontes = Fonte::query()->where('ativo', '=', 1)->orderBy('nome')->get();
         $metadados = Metadado::query()->where('id', '=', $variavel->id)->first();
         $tipo_medidas = TipoMedida::query()->where('ativo', '=', 1)->orderBy('nome')->get();
+        $indicadores = Indicador::query()->where('ativo', '=', 1)->orderBy('nome')->get();
+        $indicador_variavel = IndicadorVariavel::query()->where('variavel_id', '=', $variavel->id)->first();
 
         $mensagem = $request->session()->get('mensagem');
         
-        return view('publicacao.variaveis.edit', compact('variavel', 'departamentos', 'mensagem', 'tipo_dados', 'fontes', 'metadados', 'tipo_medidas'));
+        return view('publicacao.variaveis.edit', compact('variavel', 'departamentos', 'mensagem', 'tipo_dados', 'fontes', 'metadados', 'tipo_medidas', 'indicadores', 'indicador_variavel'));
     }
 
     public function update(int $id, VariavelRequest $request)
     {
         $variavel = Variavel::findOrFail($id);
         $metadados = Metadado::find($variavel->metadados_id);
+        $indicador_variavel = IndicadorVariavel::where('variavel_id', '=', $id)->firstOrFail();
 
         $variavel->nome = $request->nome;
         $variavel->codigo = $request->codigo;
@@ -154,9 +174,12 @@ class VariavelController extends Controller
         $metadados->organizacao = $request->organizacao;
         $metadados->observacao = $request->observacao;
 
+        $indicador_variavel->indicador_id = $request->indicador;
+
         DB::beginTransaction();
         $variavel->save();
         $metadados->save();
+        $indicador_variavel->save();
         DB::commit();
 
         $request->session()->flash('mensagem',"Variável '{$variavel->nome}' (ID {$variavel->id}) editado com sucesso!");

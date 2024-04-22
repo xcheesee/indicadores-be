@@ -13,7 +13,7 @@
             <div class="row">
                 <div class="form-group col-md-3 mb-3">
                     <label for="codigo" class="form-label control-label">Código:</label>
-                    <input type="text" class="form-control" id="codigo" name="codigo" value="{{$filtros['codigo']}}">
+                    <input type="text" class="form-control codigo" id="codigo" name="codigo" value="{{$filtros['codigo']}}">
                 </div>
                 <div class="form-group col-md-3 mb-3">
                     <label for="nome" class="form-label control-label">Nome:</label>
@@ -38,9 +38,9 @@
                         <option value="" selected>Selecione a Fonte</option>
                         @foreach ($fontes as $fonte)
                             @if ($filtros['fonte_id'] != $fonte->id)
-                                <option value="{{ $fonte->id }}">{{ $fonte->nome }} - {{ $fonte->nome }}</option> 
+                                <option value="{{ $fonte->id }}">{{ $fonte->nome }} ({{ $fonte->descricao }})</option> 
                             @else
-                                <option value="{{ $fonte->id }}" selected>{{ $fonte->nome }} - {{ $fonte->nome }}</option>
+                                <option value="{{ $fonte->id }}" selected>{{ $fonte->nome }} ({{ $fonte->descricao }})</option>
                             @endif    
                         @endforeach
                     </select>
@@ -58,18 +58,18 @@
         <table class="table">
             <thead class="thead-dark">
                 <tr>
-                    <th>Código</th>
+                    <th class="col-sm-1">Código</th>
                     <th>Nome</th>
-                    <th>Responsável</th>
-                    <th>Tipo do Dado</th>
+                    <th class="col-sm-3">Coordenação Responsável</th>
+                    <th class="col-sm-2">Tipo do Dado</th>
                     <th>Fonte</th>
-                    <th>Ação</th>
+                    <th class="col-sm-2">Ação</th>
                 </tr>
             </thead>
             <tbody class="align-middle">
                 @foreach ($data as $key => $variavel)
                 <tr>
-                    <td>{{ $variavel->codigo }}</td>
+                    <td><b>{{ $variavel->codigo }}</b></td>
                     <td>{{ $variavel->nome }}</td>
                     <td>{{ $variavel->departamento->nome }}</td>
                     <td>{{ $variavel->tipo_dado->nome }}</td>
@@ -95,4 +95,6 @@
         {{ $data->appends($_GET)->links() }}
     </div>
 </div>
+
+@include('utilitarios.scripts')
 @endsection

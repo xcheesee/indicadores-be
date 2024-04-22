@@ -6,20 +6,30 @@
 
 @section('conteudo')
 @include('layouts.mensagem', ['mensagem' => $mensagem])
+<div class="row flex gap-3 mb-3">
+    <div class="col bg-light rounded text-center py-2">
+        <b class="d-block fs-4">Indicador:</b> 
+        <span class="fs-5">{{ $indicador->nome }}</span>
+    </div>
+    <div class="col bg-light rounded text-center py-2">
+        <b class="d-block fs-4">Código:</b> 
+        <span class="fs-5">{{ $variavel->codigo }}</span>
+    </div>
+    <div class="col bg-light rounded text-center py-2">
+        <b class="d-block fs-4">Coordenação:</b> 
+        <span class="fs-5">{{ $departamento->sigla }}</span>
+    </div>
+    <div class="col bg-light rounded text-center py-2">
+        <b class="d-block fs-4">Tipo de Dado:</b> 
+        <span class="fs-5">{{ $tipo_dados->nome }}</span>
+    </div>
+    <div class="col bg-light rounded text-center py-2">
+        <b class="d-block fs-4">Fonte:</b> 
+        <span class="fs-5">{{ $fontes->nome }}</span>
+    </div>
+</div>
 <div class="row containerTabela justify-content-center">
-    <section class="mb-4">
-        <div class="mb-2">
-            <b>Código:</b> {{ $variavel->codigo }}
-        </div>
-        <div class="mb-2">
-            <b>Departamento Responsável:</b> {{ $departamento->nome }}
-        </div>
-        <div class="mb-2">
-            <b>Tipo de Dado:</b> {{ $tipo_dados->nome }}
-        </div>
-        <div class="mb-4">
-            <b>Fonte:</b> {{ $fontes->nome }}
-        </div>
+    <section class="mb-4 row">
         <h3 class="fs-4">Metadados</h3>
         <div class="mb-2">
             <b>Unidade de Medida:</b> @if ($tipo_medida != null) {{ $tipo_medida->nome }}  @endif
@@ -52,6 +62,7 @@
             <thead class="thead-dark">
                 <tr>
                     <th>Região</th>
+                    <th>Tipo da Regiao</th>
                     <th>Período</th>
                     <th>Valor</th>
                     <th>Ação</th>
@@ -64,12 +75,25 @@
                     <td>
                         <span class="valor-{{ $valor_variavel->valor_id }}">{{ $valor_variavel->valor->regiao->nome }}</span>
                         <select class="form-select campo-{{ $valor_variavel->valor_id }}" name="regiao" id="regiao" style="display: none">
-                            <option value="">Selecione a Regiao</option>
+                            <option value="">Selecione a Região</option>
                             @foreach ($regioes as $regiao)
-                                @if ($regiao->id != $valor_variavel->regiao_id)
+                                @if ($regiao->id != $valor_variavel->valor->regiao_id)
                                     <option value="{{ $regiao->id }}">{{ $regiao->nome }}</option> 
                                 @else
                                     <option value="{{ $regiao->id }}" selected>{{ $regiao->nome }}</option>  
+                                @endif
+                            @endforeach
+                        </select>
+                    </td>
+                    <td>
+                        <span class="valor-{{ $valor_variavel->valor_id }}">{{ $valor_variavel->valor->regiao->tipo_regiao->nome }}</span>
+                        <select class="form-select campo-{{ $valor_variavel->valor_id }}" name="tipo_regiao" id="tipo_regiao" style="display: none">
+                            <option value="">Selecione o Tipo de Região</option>
+                            @foreach ($tipo_regiao as $tipo)
+                                @if ($regiao->tipo_regiao_id != $valor_variavel->valor->regiao->tipo_regiao_id)
+                                    <option value="{{ $tipo->id }}">{{ $tipo->nome }}</option>  
+                                @else
+                                    <option value="{{ $tipo->id }}" selected>{{ $tipo->nome }}</option> 
                                 @endif
                             @endforeach
                         </select>
@@ -79,7 +103,7 @@
                         <input type="text" class="form-control campo-{{ $valor_variavel->valor_id }} periodo" name="periodo" value="{{ $valor_variavel->valor->periodo }}" style="display: none">
                     </td>
                     <td>
-                        <span class="valor-{{ $valor_variavel->valor_id }}">{{ $valor_variavel->valor->valor }}</span>
+                        <span class="valor-{{ $valor_variavel->valor_id }}">{{str_replace(".",",", $valor_variavel->valor->valor)}}</span>
                         <input type="text" class="form-control campo-{{ $valor_variavel->valor_id }} valor" name="valor" value="{{ $valor_variavel->valor->valor }}" style="display: none">
                     </td>
                     <td class="btn-acao-{{ $valor_variavel->valor_id }}">
@@ -119,12 +143,21 @@
             @include('layouts.erros', ['errors' => $errors])
             <section class="row">
                 <div class="form-group col-sm-12 mb-3">
-                    <label for="regiao" class="form-label control-label">Região:</label>
-                    <select class="form-select" name="regiao" id="regiao">
-                        <option value="" selected>Selecione a Região</option>
-                        @foreach ($regioes as $regiao)
-                            <option value="{{ $regiao->id }}">{{ $regiao->nome }}</option>  
+                    <label for="tipo_regiao" class="form-label control-label">Tipo da Região:</label>
+                    <select class="form-select tipo_regiao-create" name="tipo_regiao" id="tipo_regiao">
+                        <option value="" selected>Selecione o Tipo da Região</option>
+                        @foreach ($tipo_regiao as $tipo)
+                            <option value="{{ $tipo->id }}">{{ $tipo->nome }}</option>  
                         @endforeach
+                    </select>
+                </div>
+                <div class="form-group col-sm-12 mb-3">
+                    <label for="regiao" class="form-label control-label">Região:</label>
+                    <select class="form-select regiao-create" name="regiao" id="regiao">
+                        <option value="" selected>Selecione a Região</option>
+                        {{-- @foreach ($regioes as $regiao)
+                            <option value="{{ $regiao->id }}">{{ $regiao->nome }}</option>  
+                        @endforeach --}}
                     </select>
                 </div>
                 <div class="form-group col-sm mb-3">
@@ -173,5 +206,33 @@
         $( `.campo-${Id}` ).hide();
         $( `.valor-${Id}` ).show();
     }
+
+    $(".tipo_regiao-create").on("change", function() {
+        $(".regiao-create").empty('<option>')
+        $(".regiao-create").append($('<option>', {
+            value: '',
+            text: 'Selecione a Região',
+            selected: true
+        }))
+
+        $.ajax({
+            url: `http://127.0.0.1:8000/cadaux/regiao/${this.value}/filtrar`,
+            type: 'GET',
+            dataType: 'json',
+            success: function(res){
+                let lista = res.data
+                lista.forEach(element => {
+                    $(".regiao-create").append($('<option>', {
+                        value: element.id,
+                        text: element.nome
+                    }))
+                });
+                console.log(res.data)
+            },
+            error: function(status, error){
+                console.log(error);
+            }
+        })
+    })
 </script>
 @endsection

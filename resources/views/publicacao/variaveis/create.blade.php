@@ -18,18 +18,27 @@
     <section class="row mb-3">
         <div class="form-group required col-md-2 mb-3">
             <label for="codigo" class="form-label control-label">Código:</label>
-            <input type="text" class="form-control" id="codigo" name="codigo">
+            <input type="text" class="form-control codigo" id="codigo" name="codigo">
         </div>
         <div class="form-group col-md-6 mb-3">
             <label for="nome" class="form-label control-label">Nome:</label>
             <input type="text" class="form-control" id="nome" name="nome">
         </div>
         <div class="form-group required col-md-4 mb-3">
+            <label for="indicador" class="form-label control-label">Indicador:</label>
+            <select class="form-select" name="indicador" id="indicador">
+                <option value="" selected>Selecione o Indicador</option>
+                @foreach ($indicadores as $indicador)
+                    <option value="{{ $indicador->id }}">{{ $indicador->nome }}</option>  
+                @endforeach
+            </select>
+        </div>
+        <div class="form-group required col-md-4 mb-3">
             <label for="departamento" class="form-label control-label">Departamento:</label>
             <select class="form-select" name="departamento" id="departamento">
                 <option value="" selected>Selecione o Departamento</option>
                 @foreach ($departamentos as $dept)
-                    <option value="{{ $dept->id }}">{{ $dept->sigla }}</option>  
+                    <option value="{{ $dept->id }}">{{ $dept->sigla }} - {{ $dept->nome }}</option>  
                 @endforeach
             </select>
         </div>
@@ -96,4 +105,6 @@
         $( "#newform" ).slideToggle( "slow" ); 
     });
 </script>
+
+@include('utilitarios.scripts')
 @endsection

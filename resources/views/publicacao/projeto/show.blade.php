@@ -41,11 +41,15 @@
                 </tr>
             </thead>
             <tbody class="align-middle">
-                {{-- @foreach ()
+                @foreach ($indicadores as $indicador)
                 <tr>
-                    <td></td>
+                    <td>{{ $indicador->id }}</td>
+                    <td>{{ $indicador->nome }}</td>
+                    <td>{{ $indicador->departamento->nome }}</td>
+                    <td>{{ $indicador->fonte->nome }}</td>
+                    <td><a class="btn btn-primary" href="{{ route('indicador-show', $indicador->id) }}"><i class="far fa-eye"></i></a></td>
                 </tr>
-                @endforeach --}}
+                @endforeach
             </tbody>
         </table>
     </section>

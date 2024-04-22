@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\StoreProjetoRequest;
 use App\Models\Departamento;
+use App\Models\Indicador;
 use App\Models\Projeto;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -35,9 +36,13 @@ class ProjetoController extends Controller
             ->paginate(10);
 
         $departamentos = Departamento::query()->where('ativo', '=', 1)->orderBy('nome')->get();
+
+        $indicadores = Indicador::select('indicadores.projeto_id')->groupBy()->get();
+
+        // $indicador_variavel = IndicadorVariavel::select('indicador_variaveis.*')->groupBy()->get();
         
         $mensagem = $request->session()->get('mensagem');
-        return view('publicacao.projeto.index', compact('data','mensagem', 'departamentos', 'filtros'));
+        return view('publicacao.projeto.index', compact('data','mensagem', 'departamentos', 'filtros', 'indicadores'));
     }
 
     public function create(Request $request)
@@ -77,12 +82,24 @@ class ProjetoController extends Controller
 
     public function show(int $id, Request $request)
     {
+        // Projeto
         $projeto = Projeto::findOrFail($id);
         $departamento = Departamento::where('id', '=', $projeto->departamento_id)->first();
+
+        // Indicador
+        $indicadores = Indicador::query()
+            ->orderBy('id', 'ASC')
+            ->select('indicadores.*')
+            ->leftJoin('departamentos', 'departamentos.id', '=', 'indicadores.departamento_id')
+            ->leftJoin('projetos', 'projetos.id', '=', 'indicadores.projeto_id')
+            ->leftJoin('fontes', 'fontes.id', '=', 'indicadores.fonte_id')
+            ->where('indicadores.projeto_id', '=', $id)
+            ->where('indicadores.ativo', '=', 1)
+            ->paginate(5);
             
         $mensagem = $request->session()->get('mensagem');
 
-        return view('publicacao.projeto.show', compact('mensagem', 'projeto', 'departamento'));
+        return view('publicacao.projeto.show', compact('mensagem', 'projeto', 'departamento', 'indicadores'));
     }
 
     public function edit(int $id)

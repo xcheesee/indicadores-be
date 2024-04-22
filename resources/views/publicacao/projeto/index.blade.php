@@ -18,7 +18,7 @@
                 <div class="form-group col-md-4 mb-3">
                     <label for="departamento" class="form-label control-label">Unidade Responsável:</label>
                     <select class="form-select" name="departamento" id="departamento">
-                        <option value="" selected>Selecione o departamento</option>
+                        <option value="" selected>Selecione a Unidade Responsável</option>
                         @foreach ($departamentos as $dept)
                             @if ($filtros['departamento_id'] != $dept->id)
                                 <option value="{{ $dept->id }}">{{ $dept->sigla }} - {{ $dept->nome }}</option> 
@@ -56,6 +56,7 @@
                     <th>ID</th>
                     <th class="col-sm-3">Nome</th>
                     <th>Responsável</th>
+                    <th class="text-center">Qtd de Indicadores</th>
                     <th class="text-center">Publicado</th>
                     <th>Ação</th>
                 </tr>
@@ -66,6 +67,7 @@
                     <td>{{ $projeto->id }}</td>
                     <td>{{ $projeto->nome }}</td>
                     <td>{{ $projeto->departamento->nome }}</td>
+                    <td class="text-center">{{ count($indicadores->where('projeto_id', '=', $projeto->id)) }}</td>
                     <td class="text-center">
                         @if ($projeto->visivel == 0)
                             <i class="fa-solid fa-circle-xmark text-danger" style="font-size: 1.3em"></i>

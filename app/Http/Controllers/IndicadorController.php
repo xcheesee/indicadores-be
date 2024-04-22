@@ -6,8 +6,10 @@ use App\Http\Requests\IndicadorFormRequest;
 use App\Models\Departamento;
 use App\Models\Fonte;
 use App\Models\Indicador;
+use App\Models\IndicadorVariavel;
 use App\Models\Periodicidade;
 use App\Models\Projeto;
+use App\Models\Variavel;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
@@ -47,8 +49,10 @@ class IndicadorController extends Controller
         $projetos = Projeto::query()->where('ativo', '=', 1)->orderBy('nome')->get();
         $fontes = Fonte::query()->where('ativo', '=', 1)->orderBy('nome')->get();
         $mensagem = $request->session()->get('mensagem');
+
+        $indicador_variavel = IndicadorVariavel::select('indicador_variaveis.indicador_id')->groupBy()->get();
         
-        return view('publicacao.indicadores.index', compact('mensagem', 'departamentos', 'filtros', 'data', 'projetos', 'fontes'));
+        return view('publicacao.indicadores.index', compact('mensagem', 'departamentos', 'filtros', 'data', 'projetos', 'fontes', 'indicador_variavel'));
     }
 
     public function create(Request $request)
@@ -94,15 +98,23 @@ class IndicadorController extends Controller
 
     public function show(int $id, Request $request)
     {
+        // Indicador
         $indicador = Indicador::findOrFail($id);
         $projeto = Projeto::where('id', '=', $indicador->projeto_id)->first();
         $departamento = Departamento::where('id', '=', $indicador->departamento_id)->first();
         $fonte = Fonte::where('id', '=', $indicador->fonte_id)->first();
         $periodicidade = Periodicidade::where('id', '=', $indicador->periodicidade_id)->first();
+
+        // Variáveis
+        $variaveis = IndicadorVariavel::query()
+            ->select('indicador_variaveis.*')
+            ->leftJoin('variaveis', 'variaveis.id', '=', 'indicador_variaveis.variavel_id')
+            ->where('indicador_variaveis.indicador_id', '=', $id)
+            ->paginate(5);
         
         $mensagem = $request->session()->get('mensagem');
         
-        return view('publicacao.indicadores.show', compact('mensagem', 'indicador', 'departamento', 'fonte', 'periodicidade', 'projeto'));
+        return view('publicacao.indicadores.show', compact('mensagem', 'indicador', 'departamento', 'fonte', 'periodicidade', 'projeto', 'variaveis'));
     }
 
     public function edit(int $id, Request $request)

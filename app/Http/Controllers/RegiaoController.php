@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\RegiaoFormRequest;
+use App\Http\Resources\RegiaoResource;
 use App\Models\Regiao;
 use App\Models\TipoRegiao;
 use Illuminate\Http\Request;
@@ -58,5 +59,15 @@ class RegiaoController extends Controller
 
         $request->session()->flash('mensagem', "Região '{$regiao->nome}' removida com sucesso!");
         return redirect()->route('departamentos');
+    }
+
+    public function filtrar(int $tipo_regiao) {
+        $regioes = Regiao::query()
+        ->where('tipo_regiao_id', '=', $tipo_regiao)
+        ->where('regioes.ativo', '=', 1)
+        ->orderBy('regioes.nome')
+        ->get();
+
+        return RegiaoResource::collection($regioes);
     }
 }

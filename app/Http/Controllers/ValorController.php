@@ -24,11 +24,12 @@ class ValorController extends Controller
 
     public function create(ValorFormRequest $request, int $variavelId)
     {
+        $valor_formatado = str_replace(",",".", $request->valor);
         DB::beginTransaction();
         $valor = Valor::create([
             'regiao_id' => $request->regiao,
             'periodo' => $request->periodo,
-            'valor' => $request->valor,
+            'valor' => $valor_formatado,
         ]);
 
         VariavelValor::create([
@@ -44,9 +45,12 @@ class ValorController extends Controller
     public function update(int $id, Request $request, int $variavelId)
     {
         $valor = Valor::find($id);
+
+        $valor_formatado = str_replace(",",".", $request->valor);
+
         $valor->regiao_id = $request->regiao;
         $valor->periodo = $request->periodo;
-        $valor->valor = $request->valor;
+        $valor->valor = $valor_formatado;
 
         $valor->save();
 

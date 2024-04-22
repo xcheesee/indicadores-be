@@ -28,6 +28,7 @@ class VariavelRequest extends FormRequest
             'tipo_dado' => 'required',
             'fonte' => 'required',
             // 'metadados_id' => 'required'
+            'indicador' => 'required'
         ];
     }
 

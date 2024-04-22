@@ -46,9 +46,9 @@
                         <option value="" selected>Selecione a Fonte</option>
                         @foreach ($fontes as $fonte)
                             @if ($filtros['fonte_id'] != $fonte->id)
-                                <option value="{{ $fonte->id }}">{{ $fonte->nome }}</option> 
+                                <option value="{{ $fonte->id }}">{{ $fonte->nome }} ({{ $fonte->descricao }})</option> 
                             @else
-                                <option value="{{ $fonte->id }}" selected>{{ $fonte->nome }}</option>
+                                <option value="{{ $fonte->id }}" selected>{{ $fonte->nome }} ({{ $fonte->descricao }})</option>
                             @endif    
                         @endforeach
                     </select>
@@ -71,6 +71,7 @@
                     <th>Projeto</th>
                     <th>Responsável</th>
                     <th>Fonte</th>
+                    <th class="text-center">Qtd de Variáveis</th>
                     <th>Ação</th>
                 </tr>
             </thead>
@@ -82,6 +83,7 @@
                     <td>{{ $indicador->projeto->nome }}</td>
                     <td>{{ $indicador->departamento->nome }}</td>
                     <td>{{ $indicador->fonte->nome }} ({{ $indicador->fonte->descricao }})</td>
+                    <td class="text-center">{{ count($indicador_variavel->where('indicador_id', '=', $indicador->id)) }}</td>
                     <td>
                         <div>
                             <a class="btn btn-primary" href="{{ route('indicador-show', $indicador->id) }}"><i class="far fa-eye"></i></a>
