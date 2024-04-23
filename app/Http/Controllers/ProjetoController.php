@@ -111,7 +111,7 @@ class ProjetoController extends Controller
         return view('publicacao.projeto.edit', compact('projeto', 'departamentos'));
     }
 
-    public function update(int $id, StoreProjetoRequest $request)
+    public function update(int $id, Request $request)
     {
         $projeto = Projeto::findOrFail($id);
 

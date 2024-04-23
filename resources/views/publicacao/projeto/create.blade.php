@@ -19,9 +19,9 @@
         <div class="form-group required col-md-4 mb-3">
             <label for="departamento" class="form-label control-label">Departamento:</label>
             <select class="form-select" name="departamento" id="departamento">
-                <option value="" selected>Selecione o departamento</option>
+                <option value="" selected>Selecione a Unidade Responsável</option>
                 @foreach ($departamentos as $dept)
-                    <option value="{{ $dept->id }}">{{ $dept->sigla }}</option>  
+                    <option value="{{ $dept->id }}">{{ $dept->sigla }} - {{ $dept->nome }}</option>  
                 @endforeach
             </select>
         </div>

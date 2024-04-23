@@ -129,18 +129,18 @@ class IndicadorController extends Controller
         return view('publicacao.indicadores.edit', compact('mensagem', 'indicador', 'departamentos', 'projetos', 'fontes', 'periodicidades'));
     }
 
-    public function update(int $id, IndicadorFormRequest $request)
+    public function update(int $id, Request $request)
     {
         $indicador = Indicador::findOrFail($id);
 
         if($request->hasFile('imagem')){  
             $nome_imagem_formatado = preg_replace('/( )+/', '_', mb_strtolower($indicador->nome));
-            Storage::delete(['projeto_'.$nome_imagem_formatado]);
+            Storage::delete(['indicador/indicador_'.$nome_imagem_formatado]);
 
             $upload = $request->file('imagem');
             $extensao = $upload->extension();
 
-            $arquivo = $upload->storeAs('imagens', 'projeto_'.$nome_imagem_formatado.'.'.$extensao);
+            $arquivo = $upload->storeAs('imagens/indicador', 'indicador_'.$nome_imagem_formatado.'.'.$extensao);
             $indicador_imagem['imagem'] = $arquivo;
 
             $indicador->imagem = $indicador_imagem['imagem'];
@@ -154,7 +154,9 @@ class IndicadorController extends Controller
         $indicador->nota_tecnica = $request->nota_tecnica;
         $indicador->observacao = $request->observacao;
 
+        DB::beginTransaction();
         $indicador->save();
+        DB::commit();
         
         $request->session()->flash('mensagem',"Indicador '{$indicador->nome}' (ID {$indicador->id}) editado com sucesso!");
         return redirect()->route('indicadores', $indicador->id);

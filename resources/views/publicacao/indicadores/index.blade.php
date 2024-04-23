@@ -54,7 +54,7 @@
                     </select>
                 </div>
             </div>
-            <div class="d-flex justify-content-between">
+            <div class="d-flex justify-content-between mb-2">
                 <div>
                     <button type="submit" class="btn btn-primary"><i class="fas fa-filter"></i> Filtrar</button>
                 </div>
@@ -67,6 +67,7 @@
             <thead class="thead-dark">
                 <tr>
                     <th>ID</th>
+                    <th class="text-center">Imagem</th>
                     <th>Nome</th>
                     <th>Projeto</th>
                     <th>Responsável</th>
@@ -79,6 +80,7 @@
                 @foreach ($data as $key => $indicador)
                 <tr>
                     <td>{{ $indicador->id }}</td>
+                    <td><img src="{{ Storage::url($indicador->imagem) }}" alt="" style="max-height: 100px; max-width: 100px"></td>
                     <td>{{ $indicador->nome }}</td>
                     <td>{{ $indicador->projeto->nome }}</td>
                     <td>{{ $indicador->departamento->nome }}</td>
