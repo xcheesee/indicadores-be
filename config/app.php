@@ -174,7 +174,11 @@ return [
         */
         Spatie\Permission\PermissionServiceProvider::class,
         Spatie\Html\HtmlServiceProvider::class,
-
+        
+        /*
+        * Swagger Service Provider
+        */
+        L5Swagger\L5SwaggerServiceProvider::class,
 
     ])->toArray(),
 

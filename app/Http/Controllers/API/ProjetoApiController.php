@@ -9,6 +9,54 @@ use Illuminate\Http\Request;
 
 class ProjetoApiController extends Controller
 {
+    /**
+     * @OA\Get(
+     *      path="/projetos",
+     *      tags={"Projetos"},
+     *      summary="Pega a lista de Projetos",
+     *      description="Retorna a lista de Projetos",
+     *      @OA\Response(
+     *          response=200,
+     *          description="Sucesso",
+     *          @OA\JsonContent(
+     *              @OA\Examples(
+     *                  example="result", 
+     *                  value={
+     *                              {
+     *                                  "id": "integer",
+     *                                  "nome": "string",
+     *                                  "descricao": "string",
+     *                                  "departamento": {
+     *                                      "id": "integer",
+     *                                      "sigla": "string",
+     *                                      "nome": "string",
+     *                                  },
+     *                                  "imagem": "string",
+     *                                  "visivel": "integer",
+     *                              },
+     *                              {
+     *                                  "id": "integer",
+     *                                  "nome": "string",
+     *                                  "descricao": "string",
+     *                                  "departamento": {
+     *                                      "id": "integer",
+     *                                      "sigla": "string",
+     *                                      "nome": "string",
+     *                                  },
+     *                                  "imagem": "string",
+     *                                  "visivel": "integer",
+     *                              }, 
+     *                  }, 
+     *                  summary="Um exemplo de resultado"
+     *              ),
+     *          )
+     *       ),
+     *      @OA\Response(
+     *          response=404,
+     *          description="Não Encontrado"
+     *      )
+     *     )
+     */
     public function index(Request $request)
     {
         $projetos = Projeto::query()
