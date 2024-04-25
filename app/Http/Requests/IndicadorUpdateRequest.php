@@ -4,7 +4,7 @@ namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class StoreProjetoRequest extends FormRequest
+class IndicadorUpdateRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -22,11 +22,12 @@ class StoreProjetoRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'nome' => 'required|unique:projetos,nome',
+            'nome' => 'required|unique:indicadores,nome,'.$this->id,
             'departamento' => 'required',
-            'descricao' => 'required',
-            'visivel' => 'required',
-            'imagem' => 'required_if:visivel,==,1|mimes:png,jpg,jpeg,gif',
+            'projeto' => 'required',
+            'fonte' => 'required',
+            'periodicidade' => 'required',
+            'imagem' => 'mimes:png,jpg,jpeg,gif',
         ];
     }
 
@@ -34,11 +35,12 @@ class StoreProjetoRequest extends FormRequest
     {
         return [
             'required' => 'O campo :attribute é obrigatório',
-            'nome.unique' => 'Já existe projeto com esse nome',
-            'descricao.required' => 'O campo descrição é obrigatório',
-            'imagem.required_if' => 'O campo imagem é obrigatório',
+            'nome.unique' => 'Já existe indicador com esse nome',
+            'departamento.required' => 'O campo departamento é obrigatório',
+            'projeto.required' => 'O campo projeto é obrigatório',
+            'fonte.required' => 'O campo fonte é obrigatório',
+            'periodicidade.required' => 'O campo periodicidade é obrigatório',
             'imagem.mimes' => 'Favor usar um arquivo de imagem válido (png, jpg, jpeg ou gif)',
-            'visivel.required' => 'O campo publicado é obrigatório',
         ];
     }
 }

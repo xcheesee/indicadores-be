@@ -46,7 +46,7 @@
                     </select>
                 </div>
             </div>
-            <div class="d-flex justify-content-between">
+            <div class="d-flex justify-content-between mb-2">
                 <div>
                     <button type="submit" class="btn btn-primary"><i class="fas fa-filter"></i> Filtrar</button>
                 </div>

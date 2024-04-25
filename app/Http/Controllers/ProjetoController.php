@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\ProjetoUpdateRequest;
 use App\Http\Requests\StoreProjetoRequest;
 use App\Models\Departamento;
 use App\Models\Indicador;
@@ -111,7 +112,7 @@ class ProjetoController extends Controller
         return view('publicacao.projeto.edit', compact('projeto', 'departamentos'));
     }
 
-    public function update(int $id, Request $request)
+    public function update(int $id, ProjetoUpdateRequest $request)
     {
         $projeto = Projeto::findOrFail($id);
 

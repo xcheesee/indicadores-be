@@ -24,6 +24,18 @@ class ValorController extends Controller
 
     public function create(ValorFormRequest $request, int $variavelId)
     {
+        $temRegistro = Valor::query()
+            ->where('regiao_id', '=', $request->regiao)
+            ->where('periodo', '=', $request->periodo)
+            ->exists();
+
+        if ($temRegistro) {
+            
+            return back()->withErrors([
+                'Região e período já existem'
+            ]);
+        }
+        
         $valor_formatado = str_replace(",",".", $request->valor);
         DB::beginTransaction();
         $valor = Valor::create([

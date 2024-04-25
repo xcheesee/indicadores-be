@@ -78,8 +78,8 @@
         </div>
         <div class="col-md-3 mb-3">
             <label for="imagem" class="form-label">Imagem do Indicador:</label>
-            <input class="form-control" type="file" id="imagem" name="imagem" accept=".png,.jpg,.jpeg,.gif" value="{{ $indicador->imagem }}">
-            <input type="text" value="{{ $indicador->imagem }}" name="imagem" id="imagem" hidden>
+            <input class="form-control" type="file" id="imagem" name="imagem" accept=".png,.jpg,.jpeg,.gif">
+            {{-- <input type="text" value="{{ $indicador->imagem }}" name="imagem" id="imagem" hidden> --}}
         </div>
     </div>
     <div class="text-center">

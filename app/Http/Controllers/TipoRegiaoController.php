@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Requests\TipoRegiaoRequest;
+use App\Http\Requests\TipoRegiaoFormRequest;
 use App\Models\TipoRegiao;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -17,7 +17,7 @@ class TipoRegiaoController extends Controller
         return view('cadaux.tipoRegiao.index', compact('data','mensagem'));
     }
 
-    public function create(TipoRegiaoRequest $request)
+    public function create(TipoRegiaoFormRequest $request)
     {
         DB::beginTransaction();
         $tipoRegiao = TipoRegiao::create([

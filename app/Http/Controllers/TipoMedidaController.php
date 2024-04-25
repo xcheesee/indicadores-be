@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Requests\TipoMedidaRequest;
+use App\Http\Requests\TipoMedidaFormRequest;
 use App\Models\TipoMedida;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -17,7 +17,7 @@ class TipoMedidaController extends Controller
         return view('cadaux.medida.index', compact('data','mensagem'));
     }
 
-    public function create(TipoMedidaRequest $request)
+    public function create(TipoMedidaFormRequest $request)
     {
         DB::beginTransaction();
         $tipoMedida = TipoMedida::create([

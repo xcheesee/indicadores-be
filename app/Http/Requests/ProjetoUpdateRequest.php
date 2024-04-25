@@ -4,7 +4,7 @@ namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class VariavelRequest extends FormRequest
+class ProjetoUpdateRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -22,13 +22,11 @@ class VariavelRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'codigo' => 'required',
-            'nome' => 'required',
+            'nome' => 'required|unique:projetos,nome,'.$this->id,
             'departamento' => 'required',
-            'tipo_dado' => 'required',
-            'fonte' => 'required',
-            // 'metadados_id' => 'required'
-            'indicador' => 'required'
+            'descricao' => 'required',
+            'visivel' => 'required',
+            'imagem' => 'required_if:visivel,==,1|mimes:png,jpg,jpeg,gif',
         ];
     }
 
@@ -36,7 +34,11 @@ class VariavelRequest extends FormRequest
     {
         return [
             'required' => 'O campo :attribute é obrigatório',
-            'tipo_dado.required' => 'O campo tipo do dado é obrigatório',
+            'nome.unique' => 'Já existe projeto com esse nome',
+            'descricao.required' => 'O campo descrição é obrigatório',
+            'imagem.required_if' => 'O campo imagem é obrigatório',
+            'imagem.mimes' => 'Favor usar um arquivo de imagem válido (png, jpg, jpeg ou gif)',
+            'visivel.required' => 'O campo publicado é obrigatório',
         ];
     }
 }

@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Requests\TipoDadoRequest;
+use App\Http\Requests\TipoDadoFormRequest;
 use App\Models\TipoDado;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -17,7 +17,7 @@ class TipoDadoController extends Controller
         return view('cadaux.tipoDado.index', compact('data','mensagem'));
     }
 
-    public function create(TipoDadoRequest $request)
+    public function create(TipoDadoFormRequest $request)
     {
         DB::beginTransaction();
         $tipoDado= TipoDado::create([

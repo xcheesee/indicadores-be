@@ -25,8 +25,8 @@
                 @endforeach
             </select>
         </div>
-        <div class="col-md-12 mb-3">
-            <label for="descricao" class="form-label">Descrição:</label>
+        <div class="form-group required col-md-12 mb-3">
+            <label for="descricao" class="form-label control-label">Descrição:</label>
             <textarea class="form-control" id="descricao" rows="3" name="descricao"></textarea>
         </div>
         <div class="col-md-3 mb-3">

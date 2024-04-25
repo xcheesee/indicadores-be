@@ -227,7 +227,7 @@
                         text: element.nome
                     }))
                 });
-                console.log(res.data)
+                // console.log(res.data)
             },
             error: function(status, error){
                 console.log(error);

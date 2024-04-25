@@ -22,7 +22,7 @@ class IndicadorFormRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'nome' => 'required|unique',
+            'nome' => 'required|unique:indicadores,nome',
             'departamento' => 'required',
             'projeto' => 'required',
             'fonte' => 'required',
@@ -35,7 +35,7 @@ class IndicadorFormRequest extends FormRequest
     {
         return [
             'required' => 'O campo :attribute é obrigatório',
-            'nome.unique' => 'Este nome já existe',
+            'nome.unique' => 'Já existe indicador com esse nome',
             'departamento.required' => 'O campo departamento é obrigatório',
             'projeto.required' => 'O campo projeto é obrigatório',
             'fonte.required' => 'O campo fonte é obrigatório',

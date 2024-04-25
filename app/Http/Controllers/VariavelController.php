@@ -2,7 +2,8 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Requests\VariavelRequest;
+use App\Http\Requests\VariavelFormRequest;
+use App\Http\Requests\VariavelUpdateRequest;
 use App\Models\Departamento;
 use App\Models\Fonte;
 use App\Models\Indicador;
@@ -67,7 +68,7 @@ class VariavelController extends Controller
         return view('publicacao.variaveis.create', compact('mensagem', 'departamentos', 'tipo_dados', 'fontes', 'tipo_medidas', 'indicadores'));
     }
 
-    public function store(VariavelRequest $request)
+    public function store(VariavelFormRequest $request)
     {
         // dd($imagem);
         DB::beginTransaction();
@@ -155,7 +156,7 @@ class VariavelController extends Controller
         return view('publicacao.variaveis.edit', compact('variavel', 'departamentos', 'mensagem', 'tipo_dados', 'fontes', 'metadados', 'tipo_medidas', 'indicadores', 'indicador_variavel'));
     }
 
-    public function update(int $id, VariavelRequest $request)
+    public function update(int $id, VariavelUpdateRequest $request)
     {
         $variavel = Variavel::findOrFail($id);
         $metadados = Metadado::find($variavel->metadados_id);

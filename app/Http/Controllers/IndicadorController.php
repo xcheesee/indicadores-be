@@ -3,13 +3,13 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\IndicadorFormRequest;
+use App\Http\Requests\IndicadorUpdateRequest;
 use App\Models\Departamento;
 use App\Models\Fonte;
 use App\Models\Indicador;
 use App\Models\IndicadorVariavel;
 use App\Models\Periodicidade;
 use App\Models\Projeto;
-use App\Models\Variavel;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
@@ -129,7 +129,7 @@ class IndicadorController extends Controller
         return view('publicacao.indicadores.edit', compact('mensagem', 'indicador', 'departamentos', 'projetos', 'fontes', 'periodicidades'));
     }
 
-    public function update(int $id, Request $request)
+    public function update(int $id, IndicadorUpdateRequest $request)
     {
         $indicador = Indicador::findOrFail($id);
 
