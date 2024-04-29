@@ -13,11 +13,11 @@
             <div class="row">
                 <div class="form-group col-md-3 mb-3">
                     <label for="codigo" class="form-label control-label">Código:</label>
-                    <input type="text" class="form-control codigo" id="codigo" name="codigo" value="{{$filtros['codigo']}}">
+                    <input type="text" class="form-control codigo" id="codigo" name="codigo" value="{{$filtros['codigo']}}" placeholder="Código da Variável">
                 </div>
                 <div class="form-group col-md-3 mb-3">
                     <label for="nome" class="form-label control-label">Nome:</label>
-                    <input type="text" class="form-control" id="nome" name="nome" value="{{$filtros['nome']}}">
+                    <input type="text" class="form-control" id="nome" name="nome" value="{{$filtros['nome']}}" placeholder="Nome da Variável">
                 </div>
                 <div class="form-group col-md-3 mb-3">
                     <label for="departamento" class="form-label control-label">Unidade Responsável:</label>

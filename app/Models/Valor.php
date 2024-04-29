@@ -10,7 +10,7 @@ class Valor extends Model
     use HasFactory;
 
     protected $table = 'valores';
-    protected $fillable = ['nome', 'regiao_id', 'periodo', 'valor', 'ativo'];
+    protected $fillable = ['nome', 'regiao_id', 'periodo', 'categoria', 'valor', 'ativo'];
 
     public function regiao()
     {

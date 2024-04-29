@@ -27,21 +27,24 @@ class ValorController extends Controller
         $temRegistro = Valor::query()
             ->where('regiao_id', '=', $request->regiao)
             ->where('periodo', '=', $request->periodo)
+            ->leftJoin('variavel_valores', 'variavel_valores.valor_id', '=', 'valores.id')
+            ->where('variavel_valores.variavel_id', '=', $variavelId)
             ->exists();
 
         if ($temRegistro) {
-            
             return back()->withErrors([
                 'Região e período já existem'
             ]);
         }
         
         $valor_formatado = str_replace(",",".", $request->valor);
+        $categoria_formatada = strtoupper($request->categoria);
         DB::beginTransaction();
         $valor = Valor::create([
             'regiao_id' => $request->regiao,
             'periodo' => $request->periodo,
             'valor' => $valor_formatado,
+            'categoria' => $categoria_formatada
         ]);
 
         VariavelValor::create([
@@ -58,13 +61,32 @@ class ValorController extends Controller
     {
         $valor = Valor::find($id);
 
-        $valor_formatado = str_replace(",",".", $request->valor);
+        $temRegistro = Valor::query()
+            ->where('regiao_id', '=', $request->regiao)
+            ->where('periodo', '=', $request->periodo)
+            ->exists();
 
-        $valor->regiao_id = $request->regiao;
-        $valor->periodo = $request->periodo;
-        $valor->valor = $valor_formatado;
+        $update_regiao = $valor->regiao_id != $request->regiao;
+        $update_periodo = $valor->periodo != $request->periodo;
+        
+        if ($update_regiao or $update_periodo and $temRegistro){
+            return back()->withErrors([
+                'Região e período já existem'
+            ]);
+            // dd('true');
+        } else {
+            $valor_formatado = str_replace(",",".", $request->valor);
+            $categoria_formatada = strtoupper($request->categoria);
 
-        $valor->save();
+            $valor->regiao_id = $request->regiao;
+            $valor->periodo = $request->periodo;
+            $valor->valor = $valor_formatado;
+            $valor->categoria = $categoria_formatada;
+
+            DB::beginTransaction();
+            $valor->save();
+            Db::commit();
+        }
 
         $request->session()->flash('mensagem', "Valor {$valor->nome} atualizado com sucesso!");
         return redirect()->route('variavel-show', $variavelId);

@@ -64,6 +64,7 @@
                     <th>Região</th>
                     <th>Tipo da Regiao</th>
                     <th>Período</th>
+                    @if ($tipo_dados->nome == "Categorizado") <th>Categoria</th> @endif
                     <th>Valor</th>
                     <th>Ação</th>
                 </tr>
@@ -90,7 +91,7 @@
                         <select class="form-select campo-{{ $valor_variavel->valor_id }}" name="tipo_regiao" id="tipo_regiao" style="display: none">
                             <option value="">Selecione o Tipo de Região</option>
                             @foreach ($tipo_regiao as $tipo)
-                                @if ($regiao->tipo_regiao_id != $valor_variavel->valor->regiao->tipo_regiao_id)
+                                @if ($tipo->id != $valor_variavel->valor->regiao->tipo_regiao->id)
                                     <option value="{{ $tipo->id }}">{{ $tipo->nome }}</option>  
                                 @else
                                     <option value="{{ $tipo->id }}" selected>{{ $tipo->nome }}</option> 
@@ -102,6 +103,16 @@
                         <span class="valor-{{ $valor_variavel->valor_id }}">{{ $valor_variavel->valor->periodo }}</span>
                         <input type="text" class="form-control campo-{{ $valor_variavel->valor_id }} periodo" name="periodo" value="{{ $valor_variavel->valor->periodo }}" style="display: none">
                     </td>
+                    @if ($tipo_dados->nome == "Categorizado")
+                        <td>
+                            @if ($valor_variavel->valor->categoria != null)
+                                <span class="badge rounded-pill text-bg-info">{{ $valor_variavel->valor->categoria }}</span>
+                            @else
+                                <span class="badge rounded-pill text-bg-secondary">SEM CATEGORIA</span>
+                            @endif
+                            <input type="text" class="form-control campo-{{ $valor_variavel->valor_id }} categoria" name="categoria" value="{{ $valor_variavel->valor->categoria }}" style="display: none">
+                        </td>
+                    @endif
                     <td>
                         <span class="valor-{{ $valor_variavel->valor_id }}">{{str_replace(".",",", $valor_variavel->valor->valor)}}</span>
                         <input type="text" class="form-control campo-{{ $valor_variavel->valor_id }} valor" name="valor" value="{{ $valor_variavel->valor->valor }}" style="display: none">
@@ -160,6 +171,12 @@
                         @endforeach --}}
                     </select>
                 </div>
+                @if ($tipo_dados->nome == "Categorizado")
+                    <div class="form-group col-sm-12 mb-3">
+                        <label for="categoria" class="form-label control-label">Categoria:</label>
+                        <input type="text" class="form-control" id="categoria" name="categoria">
+                    </div>
+                @endif
                 <div class="form-group col-sm mb-3">
                     <label for="periodo" class="form-label control-label">Período:</label>
                     <input type="text" class="form-control" id="periodo" name="periodo">
