@@ -23,4 +23,5 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 Route::get('projetos', [ProjetoApiController::class, 'index']);
 
 
-Route::get('indicadores/{projeto_id}', [IndicadorApiController::class, 'index']);
+Route::get('indicadores', [IndicadorApiController::class, 'index']);
+Route::get('indicadores/{projeto_id}', [IndicadorApiController::class, 'show']);

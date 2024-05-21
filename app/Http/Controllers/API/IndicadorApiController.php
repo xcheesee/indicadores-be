@@ -28,9 +28,9 @@ class IndicadorApiController extends Controller
      *          description="Sucesso",
      *          @OA\JsonContent(
      *              @OA\Examples(
-     *                  example="result", 
+     *                  example="result",
      *                  value={
-     *                          "id": "integer", 
+     *                          "id": "integer",
      *                          "nome": "string",
      *                          "imagem": "string",
      *                          "nota_tecnica": "string",
@@ -48,7 +48,7 @@ class IndicadorApiController extends Controller
      *                              "nome": "string",
      *                          },
      *                          "periodicidade": "string",
-     *                  }, 
+     *                  },
      *                  summary="Um exemplo de resultado"
      *              ),
      *          )
@@ -59,7 +59,21 @@ class IndicadorApiController extends Controller
      *      )
      *     )
      */
-    public function index(Request $request, int $projeto_id)
+    public function index(Request $request)
+    {
+        $indicadores = Indicador::query()
+            ->select('indicadores.id', 'indicadores.nome', 'indicadores.observacao', 'indicadores.imagem', 'indicadores.nota_tecnica', 'indicadores.departamento_id', 'indicadores.fonte_id', 'indicadores.periodicidade_id', 'indicadores.projeto_id')
+            ->leftJoin('departamentos', 'departamentos.id', 'indicadores.departamento_id')
+            ->leftJoin('fontes', 'fontes.id', 'indicadores.fonte_id')
+            ->leftJoin('projetos', 'projetos.id', 'indicadores.projeto_id')
+            ->leftJoin('periodicidades', 'periodicidades.id', 'indicadores.periodicidade_id')
+            ->where('indicadores.ativo', '=', 1)
+            ->paginate(10);
+
+
+        return IndicadorResource::collection($indicadores);
+    }
+    public function show(Request $request, int $projeto_id)
     {
         $indicadores = Indicador::query()
             ->select('indicadores.id', 'indicadores.nome', 'indicadores.observacao', 'indicadores.imagem', 'indicadores.nota_tecnica', 'indicadores.departamento_id', 'indicadores.fonte_id', 'indicadores.periodicidade_id', 'indicadores.projeto_id')
@@ -73,5 +87,6 @@ class IndicadorApiController extends Controller
 
 
         return IndicadorResource::collection($indicadores);
+
     }
 }
