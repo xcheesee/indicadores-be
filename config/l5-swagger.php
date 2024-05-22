@@ -12,7 +12,7 @@ return [
                 /*
                  * Route for accessing api documentation interface
                 */
-                'api' => 'api/documentation',
+                'api' => env('L5_SWAGGER_SUBDIR_PATH','').'api/documentation',
             ],
             'paths' => [
                 /*
@@ -50,7 +50,7 @@ return [
             /*
              * Route for accessing parsed swagger annotations.
             */
-            'docs' => 'docs',
+            'docs' => env('L5_SWAGGER_SUBDIR_PATH','').'docs',
 
             /*
              * Route for Oauth2 authentication callback.
