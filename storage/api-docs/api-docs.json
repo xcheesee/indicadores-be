@@ -14,8 +14,11 @@
     },
     "servers": [
         {
-            "url": "http://127.0.0.1:8000/api",
+            "url": "http://10.30.18.9:81/indicadores_be/api",
             "description": "Demo API Server"
+        },
+        {
+            "url": "http://10.30.18.9:81/indicadores_be"
         }
     ],
     "paths": {
