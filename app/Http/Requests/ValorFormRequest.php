@@ -2,6 +2,7 @@
 
 namespace App\Http\Requests;
 
+use App\Rules\CategoriaRequestRule;
 use Illuminate\Foundation\Http\FormRequest;
 
 class ValorFormRequest extends FormRequest

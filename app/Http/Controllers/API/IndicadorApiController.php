@@ -73,6 +73,7 @@ class IndicadorApiController extends Controller
 
         return IndicadorResource::collection($indicadores);
     }
+    
     public function show(Request $request, int $projeto_id)
     {
         $indicadores = Indicador::query()

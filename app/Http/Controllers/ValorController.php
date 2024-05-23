@@ -4,9 +4,12 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\ValorFormRequest;
 use App\Models\Valor;
+use App\Models\Variavel;
 use App\Models\VariavelValor;
+use Closure;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Validator;
 
 class ValorController extends Controller
 {
@@ -22,8 +25,28 @@ class ValorController extends Controller
         return view('publicacao.variaveis.show', compact('valores'));
     }
 
-    public function create(ValorFormRequest $request, int $variavelId)
+    public function create(int $variavelId, Request $request)
     {
+        
+        $validator = Validator::make($request->all(), [
+            'regiao' => 'required',
+            'periodo' => 'required',
+            'categoria' => function (string $attribute, mixed $value, Closure $fail) use ($variavelId) {
+                $variavel = Variavel::find($variavelId);
+                if($variavel->tipo_dado_id == 1 and empty($value)) {
+                    $fail("O campo {$attribute} é obrigatório");
+                }
+            },
+            'valor' => 'required',
+        ],
+        [
+            'required' => 'O :attribute é obrigatório'
+        ]);
+
+        if($validator->fails()) {
+            return back()->withErrors($validator);
+        }
+
         $temRegistro = Valor::query()
             ->where('regiao_id', '=', $request->regiao)
             ->where('periodo', '=', $request->periodo)
@@ -40,6 +63,7 @@ class ValorController extends Controller
         $valor_formatado = str_replace(",",".", $request->valor);
         $categoria_formatada = strtoupper($request->categoria);
         DB::beginTransaction();
+
         $valor = Valor::create([
             'regiao_id' => $request->regiao,
             'periodo' => $request->periodo,
@@ -60,6 +84,25 @@ class ValorController extends Controller
     public function update(int $id, Request $request, int $variavelId)
     {
         $valor = Valor::find($id);
+
+        $validator = Validator::make($request->all(), [
+            'regiao' => 'required',
+            'periodo' => 'required',
+            'categoria' => function (string $attribute, mixed $value, Closure $fail) use ($variavelId) {
+                $variavel = Variavel::find($variavelId);
+                if($variavel->tipo_dado_id == 1 and empty($value)) {
+                    $fail("O campo {$attribute} é obrigatório");
+                }
+            },
+            'valor' => 'required',
+        ],
+        [
+            'required' => 'O :attribute é obrigatório'
+        ]);
+
+        if($validator->fails()) {
+            return back()->withErrors($validator);
+        }
 
         $temRegistro = Valor::query()
             ->where('regiao_id', '=', $request->regiao)

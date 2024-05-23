@@ -58,11 +58,58 @@
             <h2 class="fs-4">Valores</h2>
             <button class="btn btn-primary" type="button" data-bs-toggle="modal" data-bs-target="#exampleModal">Novo Valor</button>
         </div>
+        {{ html()->form('GET', route('variavel-show', $variavel->id))->open() }}
+        <div class="row">
+            <div class="form-group col-md mb-3">
+                <label for="regiao" class="form-label control-label">Região:</label>
+                <select class="form-select tipo_regiao-create" name="regiao" id="regiao">
+                    <option value="" selected>Selecione a Região</option>
+                    @foreach ($regioes as $regiao)
+                        @if ($filtros['regiao'] != $regiao->id)
+                            <option value="{{ $regiao->id }}">{{ $regiao->nome }}</option> 
+                        @else
+                            <option value="{{ $regiao->id }}" selected>{{ $regiao->nome }}</option> 
+                        @endif
+                    @endforeach
+                </select>
+            </div>
+            <div class="form-group col-md mb-3">
+                <label for="tipo_regiao" class="form-label control-label">Tipo da Região:</label>
+                <select class="form-select tipo_regiao-create" name="tipo_regiao" id="tipo_regiao">
+                    <option value="" selected>Selecione o Tipo da Região</option>
+                    @foreach ($tipo_regiao as $tipo)
+                        @if ($filtros['tipo_regiao'] != $tipo->id)
+                            <option value="{{ $tipo->id }}">{{ $tipo->nome }}</option>  
+                        @else
+                            <option value="{{ $tipo->id }}" selected>{{ $tipo->nome }}</option>  
+                        @endif
+                    @endforeach
+                </select>
+            </div>
+            @if ($tipo_dados->nome == "Categorizado")
+                <div class="form-group col-md mb-3">
+                    <label for="categoria" class="form-label control-label">Categoria:</label>
+                    <input type="text" class="form-control" id="categoria" name="categoria" value="{{ $filtros['categoria'] }}" placeholder="Categoria do Valor">
+                </div>
+            @endif
+            <div class="form-group col-md mb-3">
+                <label for="periodo" class="form-label control-label">Período:</label>
+                <input type="text" class="form-control" id="periodo" name="periodo" value="{{ $filtros['periodo'] }}" placeholder="Período do Valor">
+            </div>
+            <div class="form-group col-md mb-3">
+                <label for="valor" class="form-label control-label">Valor:</label>
+                <input type="text" class="form-control" id="valor" name="valor" value="{{ str_replace(".",",", $filtros['valor']) }}" placeholder="Valor">
+            </div>
+        </div>
+        <div>
+            <button class="btn btn-primary" type="submit">Filtrar</button>
+        </div>
+        {{ html()->form()->close() }}
         <table class="table overflow-y-auto">
             <thead class="thead-dark">
                 <tr>
                     <th>Região</th>
-                    <th>Tipo da Regiao</th>
+                    <th>Tipo da Região</th>
                     <th>Período</th>
                     @if ($tipo_dados->nome == "Categorizado") <th>Categoria</th> @endif
                     <th>Valor</th>
@@ -78,7 +125,7 @@
                         <select class="form-select campo-{{ $valor_variavel->valor_id }}" name="regiao" id="regiao" style="display: none">
                             <option value="">Selecione a Região</option>
                             @foreach ($regioes as $regiao)
-                                @if ($regiao->id != $valor_variavel->valor->regiao_id)
+                                @if ($regiao->id != $valor_variavel->valor->regiao->id)
                                     <option value="{{ $regiao->id }}">{{ $regiao->nome }}</option> 
                                 @else
                                     <option value="{{ $regiao->id }}" selected>{{ $regiao->nome }}</option>  
@@ -106,9 +153,9 @@
                     @if ($tipo_dados->nome == "Categorizado")
                         <td>
                             @if ($valor_variavel->valor->categoria != null)
-                                <span class="badge rounded-pill text-bg-info">{{ $valor_variavel->valor->categoria }}</span>
+                                <span class="badge rounded-pill text-bg-info valor-{{ $valor_variavel->valor_id }}">{{ $valor_variavel->valor->categoria }}</span>
                             @else
-                                <span class="badge rounded-pill text-bg-secondary">SEM CATEGORIA</span>
+                                <span class="badge rounded-pill text-bg-secondary valor-{{ $valor_variavel->valor_id }}">SEM CATEGORIA</span>
                             @endif
                             <input type="text" class="form-control campo-{{ $valor_variavel->valor_id }} categoria" name="categoria" value="{{ $valor_variavel->valor->categoria }}" style="display: none">
                         </td>
@@ -174,16 +221,16 @@
                 @if ($tipo_dados->nome == "Categorizado")
                     <div class="form-group col-sm-12 mb-3">
                         <label for="categoria" class="form-label control-label">Categoria:</label>
-                        <input type="text" class="form-control" id="categoria" name="categoria">
+                        <input type="text" class="form-control" id="categoria" name="categoria" placeholder="Categoria">
                     </div>
                 @endif
                 <div class="form-group col-sm mb-3">
                     <label for="periodo" class="form-label control-label">Período:</label>
-                    <input type="text" class="form-control" id="periodo" name="periodo">
+                    <input type="text" class="form-control" id="periodo" name="periodo" placeholder="Período">
                 </div>
                 <div class="form-group col-sm mb-3">
                     <label for="valor" class="form-label control-label">Valor:</label>
-                    <input type="text" class="form-control" id="valor" name="valor">
+                    <input type="text" class="form-control" id="valor" name="valor" placeholder="Valor">
                 </div>
             </section>
         </div>
@@ -196,60 +243,5 @@
     </div>
 </div>
 
-<script>
-    if({{ $errors->count() }} > 0){
-        const modal = new bootstrap.Modal('#exampleModal');
-        modal.show();
-        console.log(true)
-    } 
-
-    var flagId = null;
-    function editarValor(Id){
-        // if (flagId != Id && flagId != null) {
-        //     cancelarEditarValor(flagId)
-        // }
-
-        $( `.btn-acao-edicao-${Id}` ).show();
-        $( `.btn-acao-${Id}` ).hide();
-        $( `.campo-${Id}` ).show();
-        $( `.valor-${Id}` ).hide();
-    
-        flagId = Id
-    }
-
-    function cancelarEditarValor(Id){
-        $( `.btn-acao-edicao-${Id}` ).hide();
-        $( `.btn-acao-${Id}` ).show();
-        $( `.campo-${Id}` ).hide();
-        $( `.valor-${Id}` ).show();
-    }
-
-    $(".tipo_regiao-create").on("change", function() {
-        $(".regiao-create").empty('<option>')
-        $(".regiao-create").append($('<option>', {
-            value: '',
-            text: 'Selecione a Região',
-            selected: true
-        }))
-
-        $.ajax({
-            url: `http://127.0.0.1:8000/cadaux/regiao/${this.value}/filtrar`,
-            type: 'GET',
-            dataType: 'json',
-            success: function(res){
-                let lista = res.data
-                lista.forEach(element => {
-                    $(".regiao-create").append($('<option>', {
-                        value: element.id,
-                        text: element.nome
-                    }))
-                });
-                // console.log(res.data)
-            },
-            error: function(status, error){
-                console.log(error);
-            }
-        })
-    })
-</script>
+@include('utilitarios.regioesselect')
 @endsection

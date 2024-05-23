@@ -166,6 +166,13 @@ class IndicadorController extends Controller
     {
         $indicador = Indicador::find($id);
 
+        $indicador_variavel = IndicadorVariavel::select('indicador_variaveis.indicador_id')->where('indicador_id', '=', $id)->count();
+        if($indicador_variavel > 0) {
+            return back()->withErrors([
+                'O Indicador contém Variáveis'
+            ]);
+        }
+
         $indicador->ativo = 0;
         $indicador->save();
         

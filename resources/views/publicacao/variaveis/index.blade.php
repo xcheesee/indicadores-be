@@ -55,43 +55,45 @@
                 </div>
             </div>
         {{ html()->form()->close() }}
-        <table class="table">
-            <thead class="thead-dark">
-                <tr>
-                    <th class="col-sm-1">Código</th>
-                    <th>Nome</th>
-                    <th class="col-sm-3">Coordenação Responsável</th>
-                    <th class="col-sm-2">Tipo do Dado</th>
-                    <th>Fonte</th>
-                    <th class="col-sm-2">Ação</th>
-                </tr>
-            </thead>
-            <tbody class="align-middle">
-                @foreach ($data as $key => $variavel)
-                <tr>
-                    <td><b>{{ $variavel->codigo }}</b></td>
-                    <td>{{ $variavel->nome }}</td>
-                    <td>{{ $variavel->departamento->nome }}</td>
-                    <td>{{ $variavel->tipo_dado->nome }}</td>
-                    <td>{{ $variavel->fonte->nome }} ({{ $variavel->fonte->descricao }})</td>
-                    <td>
-                        <div>
-                            <a class="btn btn-primary" href="{{ route('variavel-show', $variavel->id) }}"><i class="far fa-eye"></i></a>
-                            @can('role-edit')
-                                <a class="btn btn-primary" href="{{ route('variavel-edit', $variavel->id) }}"><i class="fas fa-edit"></i></a>
-                                {{-- <a class="btn btn-primary" href="{{ route('variavel-metadados', $projeto->id) }}"><i class="fa-regular fa-file-lines"></i></a> --}}
-                            @endcan
-                            @can('role-delete')
-                            <a class="btn btn-danger" href="{{ route('variavel-destroy', $variavel->id) }}" onclick="return confirm('Tem certeza que deseja remover esta variável?')">
-                                <i class="fas fa-trash-alt"></i>
-                            </a>
-                            @endcan
-                        </div>
-                    </td>
-                </tr>
-                @endforeach
-            </tbody>
-        </table>
+        <div class="table-responsive">
+            <table class="table">
+                <thead class="thead-dark">
+                    <tr>
+                        <th class="col-sm-1">Código</th>
+                        <th class="col-2">Nome</th>
+                        <th class="col-sm-3">Coordenação Responsável</th>
+                        <th class="col-sm-2">Tipo do Dado</th>
+                        <th>Fonte</th>
+                        <th class="col-sm-2">Ação</th>
+                    </tr>
+                </thead>
+                <tbody class="align-middle">
+                    @foreach ($data as $key => $variavel)
+                    <tr>
+                        <td><b>{{ $variavel->codigo }}</b></td>
+                        <td>{{ $variavel->nome }}</td>
+                        <td>{{ $variavel->departamento->nome }}</td>
+                        <td>{{ $variavel->tipo_dado->nome }}</td>
+                        <td>{{ $variavel->fonte->nome }} ({{ $variavel->fonte->descricao }})</td>
+                        <td>
+                            <div>
+                                <a class="btn btn-primary" href="{{ route('variavel-show', $variavel->id) }}"><i class="far fa-eye"></i></a>
+                                @can('role-edit')
+                                    <a class="btn btn-primary" href="{{ route('variavel-edit', $variavel->id) }}"><i class="fas fa-edit"></i></a>
+                                    {{-- <a class="btn btn-primary" href="{{ route('variavel-metadados', $projeto->id) }}"><i class="fa-regular fa-file-lines"></i></a> --}}
+                                @endcan
+                                @can('role-delete')
+                                <a class="btn btn-danger" href="{{ route('variavel-destroy', $variavel->id) }}" onclick="return confirm('Tem certeza que deseja remover esta variável e seus valores?')">
+                                    <i class="fas fa-trash-alt"></i>
+                                </a>
+                                @endcan
+                            </div>
+                        </td>
+                    </tr>
+                    @endforeach
+                </tbody>
+            </table>
+        </div>
         {{ $data->appends($_GET)->links() }}
     </div>
 </div>

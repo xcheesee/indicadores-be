@@ -147,6 +147,13 @@ class ProjetoController extends Controller
     {
         $projeto = Projeto::find($id);
 
+        $indicadores = Indicador::select('indicadores.projeto_id')->where('projeto_id', '=', $id)->count();
+        if ($indicadores > 0) {
+            return back()->withErrors([
+                'O Projeto contém Indicadores'
+            ]);
+        }
+
         $projeto->ativo = 0;
         $projeto->save();
 
