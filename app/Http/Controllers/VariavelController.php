@@ -117,6 +117,13 @@ class VariavelController extends Controller
         $indicador_variavel = IndicadorVariavel::where('variavel_id', '=', $id)->first();
         $indicador = Indicador::where('id', '=', $indicador_variavel->indicador_id)->first();
 
+        $filtros = array();
+        $filtros['regiao'] = $request->query('regiao');
+        $filtros['tipo_regiao'] = $request->query('tipo_regiao');
+        $filtros['categoria'] = $request->query('categoria');
+        $filtros['periodo'] = $request->query('periodo');
+        $filtros['valor'] = str_replace(",",".", $request->query('valor'));
+
         // Info: Valor
         $regioes = Regiao::query()
             ->select('regioes.*')
@@ -129,15 +136,31 @@ class VariavelController extends Controller
             ->select('variavel_valores.*')
             ->leftJoin('valores', 'valores.id', '=', 'variavel_valores.valor_id')
             ->leftJoin('regioes', 'regioes.id', '=', 'valores.regiao_id')
+            ->when($filtros['regiao'], function ($query, $val) {
+                return $query->where('valores.regiao_id','like','%'.$val.'%');
+            })
+            ->when($filtros['tipo_regiao'], function ($query, $val) {
+                return $query->where('regioes.tipo_regiao_id','like','%'.$val.'%');
+            })
+            ->when($filtros['categoria'], function ($query, $val) {
+                return $query->where('valores.categoria','like','%'.$val.'%');
+            })
+            ->when($filtros['periodo'], function ($query, $val) {
+                return $query->where('valores.periodo','like','%'.$val.'%');
+            })
+            ->when($filtros['valor'], function ($query, $val) {
+                return $query->where('valores.valor','like','%'.$val.'%');
+            })
             ->where('variavel_valores.variavel_id', '=', $id)
             ->where('valores.ativo', '=', 1)
-            ->get();
+            ->paginate(10);
 
         $tipo_regiao = TipoRegiao::query()->where('ativo', '=', 1)->orderBy('nome')->get();
         
         $mensagem = $request->session()->get('mensagem');
         
-        return view('publicacao.variaveis.show', compact('variavel', 'departamento', 'metadados', 'tipo_dados', 'fontes', 'tipo_medida', 'regioes', 'valores', 'mensagem', 'indicador', 'tipo_regiao'));
+        return view('publicacao.variaveis.show', compact('variavel', 'departamento', 'metadados', 'tipo_dados', 'fontes', 'tipo_medida', 'regioes', 
+        'valores', 'mensagem', 'indicador', 'tipo_regiao', 'filtros'));
     }
 
     public function edit(int $id, Request $request)

@@ -6,6 +6,7 @@
 
 @section('conteudo')
 @include('layouts.mensagem', ['mensagem' => $mensagem])
+@include('layouts.erros', ['errors' => $errors])
 <div class="row containerTabela justify-content-center">
     <div class="row">
         {{ html()->form('GET', route('indicadores'))->open() }}
@@ -63,46 +64,48 @@
                 </div>
             </div>
         {{ html()->form()->close() }}
-        <table class="table">
-            <thead class="thead-dark">
-                <tr>
-                    <th>ID</th>
-                    <th class="text-center">Imagem</th>
-                    <th>Nome</th>
-                    <th>Projeto</th>
-                    <th>Responsável</th>
-                    <th>Fonte</th>
-                    <th class="text-center">Qtd de Variáveis</th>
-                    <th>Ação</th>
-                </tr>
-            </thead>
-            <tbody class="align-middle">
-                @foreach ($data as $key => $indicador)
-                <tr>
-                    <td>{{ $indicador->id }}</td>
-                    <td><img src="{{ Storage::url($indicador->imagem) }}" alt="" style="max-height: 100px; max-width: 100px"></td>
-                    <td>{{ $indicador->nome }}</td>
-                    <td>{{ $indicador->projeto->nome }}</td>
-                    <td>{{ $indicador->departamento->nome }}</td>
-                    <td>{{ $indicador->fonte->nome }} ({{ $indicador->fonte->descricao }})</td>
-                    <td class="text-center">{{ count($indicador_variavel->where('indicador_id', '=', $indicador->id)) }}</td>
-                    <td>
-                        <div>
-                            <a class="btn btn-primary" href="{{ route('indicador-show', $indicador->id) }}"><i class="far fa-eye"></i></a>
-                            @can('role-edit')
-                                <a class="btn btn-primary" href="{{ route('indicador-edit', $indicador->id) }}"><i class="fas fa-edit"></i></a>
-                            @endcan
-                            @can('role-delete')
-                            <a class="btn btn-danger" href="{{ route('indicador-destroy',$indicador->id) }}" onclick="return confirm('Tem certeza que deseja remover este indicador?')">
-                                <i class="fas fa-trash-alt"></i>
-                            </a>
-                            @endcan
-                        </div>
-                    </td>
-                </tr>
-                @endforeach
-            </tbody>
-        </table>
+        <div class="table-resposive">
+            <table class="table">
+                <thead class="thead-dark">
+                    <tr>
+                        <th>ID</th>
+                        <th>Imagem</th>
+                        <th>Nome</th>
+                        <th>Projeto</th>
+                        <th class="col-3">Responsável</th>
+                        <th class="col-3">Fonte</th>
+                        {{-- <th class="text-center">Qtd de Variáveis</th> --}}
+                        <th>Ação</th>
+                    </tr>
+                </thead>
+                <tbody class="align-middle">
+                    @foreach ($data as $key => $indicador)
+                    <tr>
+                        <td>{{ $indicador->id }}</td>
+                        <td><img src="{{ Storage::url($indicador->imagem) }}" alt="" style="max-height: 100px; max-width: 100px"></td>
+                        <td>{{ $indicador->nome }}</td>
+                        <td>{{ $indicador->projeto->nome }}</td>
+                        <td>{{ $indicador->departamento->nome }}</td>
+                        <td>{{ $indicador->fonte->nome }} ({{ $indicador->fonte->descricao }})</td>
+                        {{-- <td class="text-center">{{ count($indicador_variavel->where('indicador_id', '=', $indicador->id)) }}</td> --}}
+                        <td>
+                            <div>
+                                <a class="btn btn-primary" href="{{ route('indicador-show', $indicador->id) }}"><i class="far fa-eye"></i></a>
+                                @can('role-edit')
+                                    <a class="btn btn-primary" href="{{ route('indicador-edit', $indicador->id) }}"><i class="fas fa-edit"></i></a>
+                                @endcan
+                                @can('role-delete')
+                                <a class="btn btn-danger" href="{{ route('indicador-destroy',$indicador->id) }}" onclick="return confirm('Tem certeza que deseja remover este indicador?')">
+                                    <i class="fas fa-trash-alt"></i>
+                                </a>
+                                @endcan
+                            </div>
+                        </td>
+                    </tr>
+                    @endforeach
+                </tbody>
+            </table>
+        </div>
     </div>
 </div>
 @endsection
