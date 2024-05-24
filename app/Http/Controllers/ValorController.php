@@ -56,7 +56,7 @@ class ValorController extends Controller
 
         if ($temRegistro) {
             return back()->withErrors([
-                'Região e período já existem'
+                'Região e/ou período já existem'
             ]);
         }
         
@@ -107,14 +107,13 @@ class ValorController extends Controller
         $temRegistro = Valor::query()
             ->where('regiao_id', '=', $request->regiao)
             ->where('periodo', '=', $request->periodo)
+            ->leftJoin('variavel_valores', 'variavel_valores.valor_id', '=', 'valores.id')
+            ->where('variavel_valores.variavel_id', '=', $variavelId)
             ->exists();
-
-        $update_regiao = $valor->regiao_id != $request->regiao;
-        $update_periodo = $valor->periodo != $request->periodo;
         
-        if ($update_regiao or $update_periodo and $temRegistro){
+        if ($temRegistro){
             return back()->withErrors([
-                'Região e período já existem'
+                'Região e/ou período já existem'
             ]);
             // dd('true');
         } else {
