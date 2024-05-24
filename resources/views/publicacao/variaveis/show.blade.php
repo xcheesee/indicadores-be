@@ -122,20 +122,20 @@
                     {{ html()->form('POST', route('valor-update', [$valor_variavel->valor_id, $variavel->id]))->open() }}
                     <td>
                         <span class="valor-{{ $valor_variavel->valor_id }}">{{ $valor_variavel->valor->regiao->nome }}</span>
-                        <select class="form-select campo-{{ $valor_variavel->valor_id }}" name="regiao" id="regiao" style="display: none">
+                        <select class="form-select campo-{{ $valor_variavel->valor_id }} regiao" name="regiao" id="regiao" style="display: none">
                             <option value="">Selecione a Região</option>
-                            @foreach ($regioes as $regiao)
+                            {{-- @foreach ($regioes as $regiao)
                                 @if ($regiao->id != $valor_variavel->valor->regiao->id)
                                     <option value="{{ $regiao->id }}">{{ $regiao->nome }}</option> 
                                 @else
                                     <option value="{{ $regiao->id }}" selected>{{ $regiao->nome }}</option>  
                                 @endif
-                            @endforeach
+                            @endforeach --}}
                         </select>
                     </td>
                     <td>
                         <span class="valor-{{ $valor_variavel->valor_id }}">{{ $valor_variavel->valor->regiao->tipo_regiao->nome }}</span>
-                        <select class="form-select campo-{{ $valor_variavel->valor_id }}" name="tipo_regiao" id="tipo_regiao" style="display: none">
+                        <select class="form-select campo-{{ $valor_variavel->valor_id }} tipo-regiao" name="tipo_regiao" id="tipo_regiao" style="display: none">
                             <option value="">Selecione o Tipo de Região</option>
                             @foreach ($tipo_regiao as $tipo)
                                 @if ($tipo->id != $valor_variavel->valor->regiao->tipo_regiao->id)
@@ -166,7 +166,10 @@
                     </td>
                     <td class="btn-acao-{{ $valor_variavel->valor_id }}">
                         @can('role-edit')
-                            <button type="button" class="btn btn-primary" onclick="editarValor({{$valor_variavel->valor_id}})"><i class="fas fa-edit"></i></button>
+                            <button type="button" 
+                            class="btn btn-primary" 
+                            onclick="editarValor({{$valor_variavel->valor_id}}, {{$valor_variavel->valor->regiao->id}})"
+                            ><i class="fas fa-edit"></i></button>
                             {{-- <a class="btn btn-primary" href="{{ route('variavel-metadados', $projeto->id) }}"><i class="fa-regular fa-file-lines"></i></a> --}}
                         @endcan
                         @can('role-delete')
@@ -178,7 +181,7 @@
                     <td class="btn-acao-edicao-{{ $valor_variavel->valor_id }}" style="display: none">
                         @can('role-edit')
                             <button class="btn btn-success" type="submit"><i class="fas fa-check"></i></button>
-                            <button class="btn btn-warning" onclick="cancelarEditarValor({{$valor_variavel->valor_id}})" type="button"><i class="fas fa-xmark"></i></button>
+                            <button class="btn btn-warning" onclick="cancelarEditarValor({{$valor_variavel->valor_id}})" type="reset"><i class="fas fa-xmark"></i></button>
                         @endcan
                     </td>
                     {{ html()->form()->close() }}
