@@ -62,7 +62,7 @@
         </div>
         <div class="form-group col-md-3 required mb-3">
             <label for="imagem" class="form-label control-label">Imagem do Indicador:</label>
-            <input class="form-control" type="file" id="imagem" name="imagem" accept=".png,.jpg,.jpeg,.gif">
+            <input class="form-control" type="file" id="imagem" name="imagem" accept=".svg">
         </div>
     </div>
     <div class="text-center">

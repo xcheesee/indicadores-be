@@ -13,7 +13,7 @@
                     <a href="{{ route('projetos') }}" class="list-group-item list-group-item-action">Projetos</a>
                     <a href="{{ route('indicadores') }}" class="list-group-item list-group-item-action">Indicadores</a>
                     <a href="{{ route('variaveis') }}" class="list-group-item list-group-item-action">Variáveis</a>
-                    <a href="#" class="list-group-item list-group-item-action disabled">Gráficos</a>
+                    <a href="{{ route('graficos') }}" class="list-group-item list-group-item-action">Gráficos</a>
                     {{-- <a href="#" class="list-group-item list-group-item-action">Cruzar Dados</a> --}}
                 </div>
             </li>

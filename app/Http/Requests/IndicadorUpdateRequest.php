@@ -27,7 +27,7 @@ class IndicadorUpdateRequest extends FormRequest
             'projeto' => 'required',
             'fonte' => 'required',
             'periodicidade' => 'required',
-            'imagem' => 'mimes:png,jpg,jpeg,gif',
+            'imagem' => 'mimes:svg',
         ];
     }
 
@@ -40,7 +40,7 @@ class IndicadorUpdateRequest extends FormRequest
             'projeto.required' => 'O campo projeto é obrigatório',
             'fonte.required' => 'O campo fonte é obrigatório',
             'periodicidade.required' => 'O campo periodicidade é obrigatório',
-            'imagem.mimes' => 'Favor usar um arquivo de imagem válido (png, jpg, jpeg ou gif)',
+            'imagem.mimes' => 'Favor usar um arquivo de imagem válido (svg)',
         ];
     }
 }
