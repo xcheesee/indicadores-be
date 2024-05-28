@@ -12,7 +12,7 @@ class VariavelAPIController extends Controller
     /**
     * @OA\Get(
     *      path="/variaveis",
-    *      tags={"Variavel"},
+    *      tags={"Variável"},
     *      summary="Traz a lista de Variáveis",
     *      description="Retorna a lista de Variáveis",
     *      @OA\Response(
@@ -116,8 +116,8 @@ class VariavelAPIController extends Controller
     /**
      * @OA\Get(
      *      path="/indicador/{indicador_id}/variaveis",
-     *      tags={"Variavel"},
-     *      summary="Traz a lista das Variáveis de um indicador",
+     *      tags={"Variável"},
+     *      summary="Traz a lista de variáveis de um indicador",
      *      description="Retorna a lista de Variáveis de um indicador",
      *      @OA\Parameter(
      *          name="indicador_id",
