@@ -34,6 +34,7 @@ class VariavelAPIController extends Controller
     *                                          "nome": "string",
     *                                          "sigla": "string",
     *                                      },
+    *                                     },
     *                                      "tipo_dado": {
     *                                          "id": "integer",
     *                                          "tipo": "string",
@@ -88,7 +89,7 @@ class VariavelAPIController extends Controller
     *                                  },
     *                              },
     *                  }, 
-    *                  summary="Um exemplo de resultado"
+    *                  summary="Um exemplo de resultado",
     *              ),
     *          )
     *       ),
