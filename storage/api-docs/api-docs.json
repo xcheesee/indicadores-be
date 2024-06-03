@@ -14,11 +14,11 @@
     },
     "servers": [
         {
-            "url": "http://127.0.0.1:8000/indicadores_be/api",
+            "url": "http://10.30.18.9:81/indicadores_be/api",
             "description": "Demo API Server"
         },
         {
-            "url": "http://127.0.0.1:8000/indicadores_be"
+            "url": "http://10.30.18.9:81/indicadores_be"
         }
     ],
     "paths": {
@@ -137,7 +137,7 @@
         "/variaveis": {
             "get": {
                 "tags": [
-                    "Variavel"
+                    "Variável"
                 ],
                 "summary": "Traz a lista de Variáveis",
                 "description": "Retorna a lista de Variáveis",
@@ -233,9 +233,9 @@
         "/indicador/{indicador_id}/variaveis": {
             "get": {
                 "tags": [
-                    "Variavel"
+                    "Variável"
                 ],
-                "summary": "Traz a lista das Variáveis de um indicador",
+                "summary": "Traz a lista de variáveis de um indicador",
                 "description": "Retorna a lista de Variáveis de um indicador",
                 "operationId": "04118b3ec6863d106a28fe956f161514",
                 "parameters": [
