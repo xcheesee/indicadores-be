@@ -9,56 +9,7 @@ use Illuminate\Http\Request;
 
 class IndicadorApiController extends Controller
 {
-    /**
-     * @OA\Get(
-     *      path="/indicadores/{id}",
-     *      tags={"Indicadores"},
-     *      summary="Pega a lista de Indicadores",
-     *      description="Retorna a lista de Indicadores",
-     *      @OA\Parameter(
-     *          name="id",
-     *          required=true,
-     *          in="path",
-     *          @OA\Schema(
-     *              type="integer"
-     *          )
-     *      ),
-     *      @OA\Response(
-     *          response=200,
-     *          description="Sucesso",
-     *          @OA\JsonContent(
-     *              @OA\Examples(
-     *                  example="result",
-     *                  value={
-     *                          "id": "integer",
-     *                          "nome": "string",
-     *                          "imagem": "string",
-     *                          "nota_tecnica": "string",
-     *                          "observacao": "string",
-     *                          "projeto_id": "integer",
-     *                          "projeto": "string",
-     *                          "fonte": {
-     *                              "id": "integer",
-     *                              "nome": "string",
-     *                              "descricao": "string",
-     *                          },
-     *                          "departamento": {
-     *                              "id": "integer",
-     *                              "sigla": "string",
-     *                              "nome": "string",
-     *                          },
-     *                          "periodicidade": "string",
-     *                  },
-     *                  summary="Um exemplo de resultado"
-     *              ),
-     *          )
-     *       ),
-     *      @OA\Response(
-     *          response=404,
-     *          description="Não Encontrado"
-     *      )
-     *     )
-     */
+    
     public function index(Request $request)
     {
         $indicadores = Indicador::query()
@@ -74,6 +25,56 @@ class IndicadorApiController extends Controller
         return IndicadorResource::collection($indicadores);
     }
     
+    /**
+    * @OA\Get(
+    *      path="/indicadores/{id}",
+    *      tags={"Indicadores"},
+    *      summary="Pega a lista de Indicadores",
+    *      description="Retorna a lista de Indicadores",
+    *      @OA\Parameter(
+    *          name="id",
+    *          required=true,
+    *          in="path",
+    *          @OA\Schema(
+    *              type="integer"
+    *          )
+    *      ),
+    *      @OA\Response(
+    *          response=200,
+    *          description="Sucesso",
+    *          @OA\JsonContent(
+    *              @OA\Examples(
+    *                  example="result",
+    *                  value={
+    *                          "id": "integer",
+    *                          "nome": "string",
+    *                          "imagem": "string",
+    *                          "nota_tecnica": "string",
+    *                          "observacao": "string",
+    *                          "projeto_id": "integer",
+    *                          "projeto": "string",
+    *                          "fonte": {
+    *                              "id": "integer",
+    *                              "nome": "string",
+    *                              "descricao": "string",
+    *                          },
+    *                          "departamento": {
+    *                              "id": "integer",
+    *                              "sigla": "string",
+    *                              "nome": "string",
+    *                          },
+    *                          "periodicidade": "string",
+    *                  },
+    *                  summary="Um exemplo de resultado"
+    *              ),
+    *          )
+    *       ),
+    *      @OA\Response(
+    *          response=404,
+    *          description="Não Encontrado"
+    *      )
+    *     )
+    */
     public function show(Request $request, int $projeto_id)
     {
         $indicadores = Indicador::query()

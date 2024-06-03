@@ -114,26 +114,26 @@ class VariavelAPIController extends Controller
     }
 
     /**
-     * @OA\Get(
-     *      path="/indicador/{indicador_id}/variaveis",
-     *      tags={"Variável"},
-     *      summary="Traz a lista de variáveis de um indicador",
-     *      description="Retorna a lista de Variáveis de um indicador",
-     *      @OA\Parameter(
-     *          name="indicador_id",
-     *          required=true,
-     *          in="path",
-     *          @OA\Schema(
-     *              type="integer"
-     *          )
-     *      ),
-     *      @OA\Response(
-     *          response=200,
-     *          description="Sucesso",
-     *          @OA\JsonContent(
-     *              @OA\Examples(
-     *                  example="result", 
-     *                  value={
+    * @OA\Get(
+    *      path="/indicador/{indicador_id}/variaveis",
+    *      tags={"Variável"},
+    *      summary="Traz a lista de variáveis de um indicador",
+    *      description="Retorna a lista de Variáveis de um indicador",
+    *      @OA\Parameter(
+    *          name="indicador_id",
+    *          required=true,
+    *          in="path",
+    *          @OA\Schema(
+    *              type="integer"
+    *          )
+    *      ),
+    *      @OA\Response(
+    *          response=200,
+    *          description="Sucesso",
+    *          @OA\JsonContent(
+    *              @OA\Examples(
+    *                  example="result", 
+    *                  value={
     *                              {
     *                                  "id": "integer",
     *                                  "indicador_id": "integer",
@@ -160,24 +160,23 @@ class VariavelAPIController extends Controller
     *                                          "tipo_medida_id": "string",
     *                                          "serie_historica_inicio": "string",
     *                                          "serie_historica_fim": "string",
-    *                                          "serie_historica_ativo": "integer",
     *                                          "nota_tecnica": "string",
     *                                          "organizacao": "string",
     *                                          "observação": "string",
     *                                      },
     *                                  },
-     *                              },
-     *                  }, 
-     *                  summary="Um exemplo de resultado"
-     *              ),
-     *          )
-     *       ),
-     *      @OA\Response(
-     *          response=404,
-     *          description="Não Encontrado"
-     *      )
-     *     )
-     */
+    *                              },
+    *                  }, 
+    *                  summary="Um exemplo de resultado"
+    *              ),
+    *          )
+    *       ),
+    *      @OA\Response(
+    *          response=404,
+    *          description="Não Encontrado"
+    *      )
+    *     )
+    */
     public function show(int $indicador_id)
     {
         $variavel = IndicadorVariavel::query()

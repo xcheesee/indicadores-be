@@ -19,7 +19,7 @@ class TipoRegiaoResource extends JsonResource
             'id' => $this->id,
             'nome' => $this->nome,
             'sigla' => $this->sigla,
-            'ativo' => $this->ativo,
+            'ativo' => $this->ativo == 1 ?  true : false,
         ];
     }
 }

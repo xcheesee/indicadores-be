@@ -25,6 +25,8 @@ class ValorResource extends JsonResource
                 'id' => $this->valor->regiao_id,
                 'nome' => $this->valor->regiao->nome,
                 'sigla' => $this->valor->regiao->sigla,
+                'tipo_regiao_id' => $this->valor->regiao->tipo_regiao_id,
+                'tipo_regiao' => $this->valor->regiao->tipo_regiao->nome,
             ],
             'periodo' => $this->valor->periodo,
             'categoria' => $this->valor->categoria,
