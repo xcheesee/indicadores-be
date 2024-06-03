@@ -29,7 +29,7 @@
                 ],
                 "summary": "Pega a lista de Indicadores",
                 "description": "Retorna a lista de Indicadores",
-                "operationId": "63544f89e11f201c70bfb9ce23067936",
+                "operationId": "de7380811dd6727c968a33b913dacf7f",
                 "parameters": [
                     {
                         "name": "id",
@@ -123,6 +123,184 @@
                                                 "visivel": "integer"
                                             }
                                         ]
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Não Encontrado"
+                    }
+                }
+            }
+        },
+        "/tipo_regioes": {
+            "get": {
+                "tags": [
+                    "Tipo de Regiões"
+                ],
+                "summary": "Traz a lista dos tipos de regiões cadastradas no sistema",
+                "description": "Retorna uma lista dos tipos de regiões",
+                "operationId": "116959974f5edd0424b153ebba0533fb",
+                "responses": {
+                    "200": {
+                        "description": "Sucesso",
+                        "content": {
+                            "application/json": {
+                                "schema": {},
+                                "examples": {
+                                    "result": {
+                                        "summary": "Um exemplo de resultado",
+                                        "value": [
+                                            {
+                                                "id": "integer",
+                                                "nome": "string",
+                                                "sigla": "string",
+                                                "ativo": "boolean"
+                                            },
+                                            {
+                                                "id": "integer",
+                                                "nome": "string",
+                                                "sigla": "string",
+                                                "ativo": "boolean"
+                                            }
+                                        ]
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Não Encontrado"
+                    }
+                }
+            }
+        },
+        "/valores": {
+            "get": {
+                "tags": [
+                    "Valores"
+                ],
+                "summary": "Traz a lista de todos os Valores cadastrados nas variáveis",
+                "description": "Retorna a lista de Valores",
+                "operationId": "4a84dc148dd72d5e5f99ec7d77ea9d75",
+                "responses": {
+                    "200": {
+                        "description": "Sucesso",
+                        "content": {
+                            "application/json": {
+                                "schema": {},
+                                "examples": {
+                                    "result": {
+                                        "summary": "Um exemplo de resultado",
+                                        "value": [
+                                            {
+                                                "id": "integer",
+                                                "regiao": {
+                                                    "id": "integer",
+                                                    "nome": "string",
+                                                    "sigla": "string",
+                                                    "tipo_regiao_id": "integer",
+                                                    "tipo_regiao": "string"
+                                                },
+                                                "periodo": "string",
+                                                "categoria": "string",
+                                                "valor": "string"
+                                            },
+                                            {
+                                                "id": "integer",
+                                                "regiao": {
+                                                    "id": "integer",
+                                                    "nome": "string",
+                                                    "sigla": "string",
+                                                    "tipo_regiao_id": "integer",
+                                                    "tipo_regiao": "string"
+                                                },
+                                                "periodo": "string",
+                                                "categoria": "string",
+                                                "valor": "string"
+                                            }
+                                        ]
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Não Encontrado"
+                    }
+                }
+            }
+        },
+        "/variavel/{variavel_id}/valores": {
+            "get": {
+                "tags": [
+                    "Valores"
+                ],
+                "summary": "Traz a lista de valores de uma variável",
+                "description": "Retorna a lista de Valores da variável",
+                "operationId": "b351d25919b37287279fa56042a4b40f",
+                "parameters": [
+                    {
+                        "name": "variavel_id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Sucesso",
+                        "content": {
+                            "application/json": {
+                                "schema": {},
+                                "examples": {
+                                    "result": {
+                                        "summary": "Um exemplo de resultado",
+                                        "value": {
+                                            "data": [
+                                                {
+                                                    "id": "integer",
+                                                    "regiao": {
+                                                        "id": "integer",
+                                                        "nome": "string",
+                                                        "sigla": "string",
+                                                        "tipo_regiao_id": "integer",
+                                                        "tipo_regiao": "string"
+                                                    },
+                                                    "periodo": "string",
+                                                    "categoria": "string",
+                                                    "valor": "string"
+                                                },
+                                                {
+                                                    "id": "integer",
+                                                    "regiao": {
+                                                        "id": "integer",
+                                                        "nome": "string",
+                                                        "sigla": "string",
+                                                        "tipo_regiao_id": "integer",
+                                                        "tipo_regiao": "string"
+                                                    },
+                                                    "periodo": "string",
+                                                    "categoria": "string",
+                                                    "valor": "string"
+                                                }
+                                            ],
+                                            "periodo": [
+                                                "string",
+                                                "string"
+                                            ],
+                                            "valores": [
+                                                "integer",
+                                                "integer"
+                                            ],
+                                            "regioes": [
+                                                "string",
+                                                "string"
+                                            ]
+                                        }
                                     }
                                 }
                             }
@@ -284,7 +462,6 @@
                                                         "tipo_medida_id": "string",
                                                         "serie_historica_inicio": "string",
                                                         "serie_historica_fim": "string",
-                                                        "serie_historica_ativo": "integer",
                                                         "nota_tecnica": "string",
                                                         "organizacao": "string",
                                                         "observação": "string"
