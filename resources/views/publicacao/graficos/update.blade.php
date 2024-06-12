@@ -65,9 +65,6 @@
                 <option value="0" selected>0 casas</option>
                 <option value="1">1 casa</option>
                 <option value="2">2 casas</option>
-                {{-- @foreach ($tipo_dados as $dado)
-                    <option value="{{ $dado->id }}">{{ $dado->nome }}</option>  
-                @endforeach --}}
             </select>
         </div>
         <div class="form-group required col-md-2 mb-3">

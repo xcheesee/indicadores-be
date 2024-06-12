@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\IndicadorFormRequest;
 use App\Http\Requests\IndicadorUpdateRequest;
+use App\Http\Resources\IndicadorResource;
 use App\Models\Departamento;
 use App\Models\Fonte;
 use App\Models\Indicador;
@@ -178,5 +179,9 @@ class IndicadorController extends Controller
         
         $request->session()->flash('mensagem', "Indicador '{$indicador->nome}' removido com sucesso!");
         return redirect()->route('indicadores');
+    }
+
+    public function getIndicador(int $id){
+        return new IndicadorResource(Indicador::findOrFail($id));
     }
 }

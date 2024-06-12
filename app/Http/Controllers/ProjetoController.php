@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\ProjetoUpdateRequest;
 use App\Http\Requests\StoreProjetoRequest;
+use App\Http\Resources\IndicadorResource;
 use App\Models\Departamento;
 use App\Models\Indicador;
 use App\Models\Projeto;
@@ -159,5 +160,14 @@ class ProjetoController extends Controller
 
         $request->session()->flash('mensagem', "Projeto '{$projeto->nome}' removida com sucesso!");
         return redirect()->route('projetos');
+    }
+
+    public function filtrar(int $id) {
+        $indicador = Indicador::query()
+        ->where('projeto_id', '=', $id)
+        ->orderBy('nome')
+        ->get();
+
+        return IndicadorResource::collection($indicador);
     }
 }

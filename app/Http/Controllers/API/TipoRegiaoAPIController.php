@@ -48,7 +48,7 @@ class TipoRegiaoAPIController extends Controller
     public function index()
     {
         $tipo_regioes = TipoRegiao::query()
-            ->select('tipo_regioes.id', 'tipo_regioes.nome', 'tipo_regioes.sigla', 'tipo_regioes.ativo')
+            ->select('tipo_regioes.*')
             ->get();
 
         return TipoRegiaoResource::collection($tipo_regioes);

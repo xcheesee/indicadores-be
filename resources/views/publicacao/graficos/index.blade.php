@@ -9,7 +9,7 @@
 
 <div class="row containerTabela justify-content-center">
     <div class="row">
-        {{ html()->form('GET', route('variaveis'))->open() }}
+        {{ html()->form('GET', route('graficos'))->open() }}
             {{-- <div class="row">
                 <div class="form-group col-md-3 mb-3">
                     <label for="codigo" class="form-label control-label">Código:</label>
@@ -51,7 +51,7 @@
                     <button type="submit" class="btn btn-primary"><i class="fas fa-filter"></i> Filtrar</button>
                 </div>
                 <div>
-                    <a class="btn btn-primary" href="{{ route('variavel-create') }}">Novo Gráfico</a>
+                    <a class="btn btn-primary" href="{{ route('grafico-create') }}">Novo Gráfico</a>
                 </div>
             </div>
         {{ html()->form()->close() }}

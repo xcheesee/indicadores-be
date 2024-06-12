@@ -24,7 +24,6 @@ class IndicadorResource extends JsonResource
             'observacao' => $this->observacao,
             'projeto_id' => $this->projeto_id,
             'projeto' => $this->projeto->nome,
-            // 'fonte_id' => $this->fonte_id,
             'fonte' => [
                 'id' => $this->fonte->id,
                 'nome' => $this->fonte->nome,

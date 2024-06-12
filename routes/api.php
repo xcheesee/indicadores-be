@@ -25,23 +25,23 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 });
 
 // Projetos
-Route::get('projetos', [ProjetoApiController::class, 'index']);
+Route::get('/projetos', [ProjetoApiController::class, 'index']);
 
 // Indicadores
-Route::get('indicadores', [IndicadorApiController::class, 'index']);
-Route::get('indicadores/{projeto_id}', [IndicadorApiController::class, 'show']);
+Route::get('/indicadores', [IndicadorApiController::class, 'index']);
+Route::get('/indicadores/{projeto_id}', [IndicadorApiController::class, 'show']);
 
 // Valores
-Route::get('valores', [ValorApiController::class, 'index']);
-Route::get('variavel/{variavel_id}/valores', [ValorApiController::class, 'show']);
+Route::get('/valores', [ValorApiController::class, 'index']);
+Route::get('/variavel/{variavel_id}/valores', [ValorApiController::class, 'show']);
 
 // Variaveis
-Route::get('variavel', [VariavelAPIController::class, 'index']);
-Route::get('indicador/{indicador_id}/variavel', [VariavelAPIController::class, 'show']);
+Route::get('/variavel', [VariavelAPIController::class, 'index']);
+Route::get('/indicador/{indicador_id}/variavel', [VariavelAPIController::class, 'show']);
 
 // Regioes
-Route::get('regioes', [RegiaoAPIController::class, 'index']);
-Route::get('regioes/{tipo_regiao_id}', [RegiaoAPIController::class, 'show']);
+Route::get('/regioes', [RegiaoAPIController::class, 'index']);
+Route::get('/regioes/{tipo_regiao_id}', [RegiaoAPIController::class, 'show']);
 
 // Tipos de Região
-Route::get('tipo_regioes', [TipoRegiaoAPIController::class, 'index']);
+Route::get('/tipo_regioes', [TipoRegiaoAPIController::class, 'index']);
