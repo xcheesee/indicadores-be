@@ -14,7 +14,7 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::prefix(env('APP_FOLDER', ''))->group(function () { //considerando que o projeto estará em subdiretório em homol/prod
+Route::prefix(env('APP_FOLDER', 'indicadores_be'))->group(function () { //considerando que o projeto estará em subdiretório em homol/prod
     //Tela inicial
     Route::get('/', [App\Http\Controllers\HomeController::class, 'welcome'])->name('welcome');
 
@@ -113,6 +113,7 @@ Route::prefix(env('APP_FOLDER', ''))->group(function () { //considerando que o p
         Route::get('/publicacao/variavel/{id}/editar', [App\Http\Controllers\VariavelController::class, 'edit'])->name('variavel-edit');
         Route::post('/variavel/{id}/editar', [App\Http\Controllers\VariavelController::class, 'update'])->name('variavel-update');
         Route::get('/variavel/{id}/destroy', [App\Http\Controllers\VariavelController::class, 'destroy'])->name('variavel-destroy');
+        Route::get('/variavel/{id}/periodos', [App\Http\Controllers\VariavelController::class, 'periodos'])->name('variavel-periodos');
         
         // Valores
         Route::get('/valores', [App\Http\Controllers\ValorController::class, 'index'])->name('valores');

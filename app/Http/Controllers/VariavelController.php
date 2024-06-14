@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\VariavelFormRequest;
 use App\Http\Requests\VariavelUpdateRequest;
+use App\Http\Resources\PeriodoResource;
 use App\Models\Departamento;
 use App\Models\Fonte;
 use App\Models\Indicador;
@@ -124,6 +125,11 @@ class VariavelController extends Controller
         $filtros['periodo'] = $request->query('periodo');
         $filtros['valor'] = str_replace(",",".", $request->query('valor'));
 
+        if($filtros['periodo'] == null){
+            $periodos = $this->periodos($id, $request);
+            $filtros['periodo'] = !empty($periodos->resource) ? $periodos[0] : null;
+        }
+
         // Info: Valor
         $regioes = Regiao::query()
             ->select('regioes.*')
@@ -136,6 +142,7 @@ class VariavelController extends Controller
             ->select('variavel_valores.*')
             ->leftJoin('valores', 'valores.id', '=', 'variavel_valores.valor_id')
             ->leftJoin('regioes', 'regioes.id', '=', 'valores.regiao_id')
+            // ->orderBy('valores.periodo', 'DESC')
             ->when($filtros['regiao'], function ($query, $val) {
                 return $query->where('valores.regiao_id','like','%'.$val.'%');
             })
@@ -158,7 +165,7 @@ class VariavelController extends Controller
         $tipo_regiao = TipoRegiao::query()->where('ativo', '=', 1)->orderBy('nome')->get();
         
         $mensagem = $request->session()->get('mensagem');
-        
+
         return view('publicacao.variaveis.show', compact('variavel', 'departamento', 'metadados', 'tipo_dados', 'fontes', 'tipo_medida', 'regioes', 
         'valores', 'mensagem', 'indicador', 'tipo_regiao', 'filtros'));
     }
@@ -219,5 +226,29 @@ class VariavelController extends Controller
 
         $request->session()->flash('mensagem', "Variável '{$variavel->nome}' removida com sucesso!");
         return redirect()->route('variaveis');
+    }
+
+    public function periodos(int $id, Request $request)
+    {
+        $periodo_valores = VariavelValor::query()
+            ->select('variavel_valores.id', 'variavel_valores.variavel_id', 'variavel_valores.valor_id')
+            ->leftJoin('valores', 'valores.id', '=', 'variavel_valores.valor_id')
+            ->orderBy('valores.periodo', 'DESC')
+            ->where('variavel_valores.variavel_id', '=', $id)
+            ->where('valores.ativo', '=', 1)
+            ->get();
+
+        $periodos = array();
+        for ($i = 0; $i < count($periodo_valores); ++$i){
+
+            $valor_periodo = $periodo_valores[$i]['valor']['periodo'];
+
+            if(in_array($valor_periodo, $periodos) == false){
+                array_push($periodos, $valor_periodo);
+            } 
+        }
+
+        return new PeriodoResource($periodos);
+        // return view('publicacao.variaveis.show', compact('periodos'));
     }
 }
