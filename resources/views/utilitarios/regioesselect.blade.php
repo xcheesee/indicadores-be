@@ -65,7 +65,7 @@
         
 
         await $.ajax({
-            url: `http://127.0.0.1:8000/cadaux/regiao/${valor_tipoRegiao}/filtrar`,
+            url: `{{ env('APP_FOLDER', 'indicadores_be') }}/cadaux/regiao/${valor_tipoRegiao}/filtrar`,
             type: 'GET',
             dataType: 'json',
             success: function(res){
@@ -103,7 +103,7 @@
         }))
 
         $.ajax({
-            url: `http://127.0.0.1:8000/cadaux/regiao/${this.value}/filtrar`,
+            url: `{{ env('APP_FOLDER', 'indicadores_be') }}/cadaux/regiao/${this.value}/filtrar`,
             type: 'GET',
             dataType: 'json',
             success: function(res){

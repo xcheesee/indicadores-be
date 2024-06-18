@@ -94,7 +94,10 @@
             @endif
             <div class="form-group col-md mb-3">
                 <label for="periodo" class="form-label control-label">Período:</label>
-                <input type="text" class="form-control" id="periodo" name="periodo" value="{{ $filtros['periodo'] }}" placeholder="Período do Valor">
+                {{-- <input type="text" class="form-control" id="periodo" name="periodo" value="{{ $filtros['periodo'] }}" placeholder="Período do Valor"> --}}
+                <select class="form-select" name="periodo" id="periodo">
+                    <option value="">Selecione um Período</option>
+                </select>
             </div>
             <div class="form-group col-md mb-3">
                 <label for="valor" class="form-label control-label">Valor:</label>
@@ -245,6 +248,52 @@
       </div>
     </div>
 </div>
+<script>
+    $.ajax({
+        url: `{{ env('APP_FOLDER', 'indicadores_be') }}/variavel/{{$variavel->id}}/periodos`,
+        type: 'GET',
+        dataType: 'json',
+        success: function(res){
+            let lista = res.data
+            const queryString = window.location.search;
+            const params = new URLSearchParams(queryString);
+            var periodo = params.get('periodo');
+            lista.forEach(element => {
+                
+                if(params.has('periodo') && element == periodo) {
+                    $("#periodo").append($('<option>', {
+                        value: element,
+                        text: element,
+                        selected: true
+                    }))
+                } else if (element == lista[0]) {
+                    $("#periodo").append($('<option>', {
+                        value: element,
+                        text: element,
+                        selected: true
+                    }))
+                } else {
+                    $("#periodo").append($('<option>', {
+                        value: element,
+                        text: element,
+                    }))
+                }
+                
+            });
+
+            
+            // var nome = params.get('periodo');
+            // console.log(nome)
+            // if (params.has('periodo')) {
+            //     console.log('tem')
+            // }
+            // console.log(res.data)
+        },
+        error: function(status, error){
+            console.log(error);
+        }
+    })
+</script>
 
 @include('utilitarios.regioesselect')
 @endsection

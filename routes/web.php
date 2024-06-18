@@ -14,7 +14,7 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::prefix(env('APP_FOLDER', ''))->group(function () { //considerando que o projeto estará em subdiretório em homol/prod
+Route::prefix(env('APP_FOLDER', 'indicadores_be'))->group(function () { //considerando que o projeto estará em subdiretório em homol/prod
     //Tela inicial
     Route::get('/', [App\Http\Controllers\HomeController::class, 'welcome'])->name('welcome');
 
@@ -93,6 +93,7 @@ Route::prefix(env('APP_FOLDER', ''))->group(function () { //considerando que o p
         Route::get('/publicacao/projeto/{id}/editar', [App\Http\Controllers\ProjetoController::class, 'edit'])->name('projeto-edit');
         Route::post('/projeto/{id}/editar', [App\Http\Controllers\ProjetoController::class, 'update'])->name('projeto-update');
         Route::get('/projeto/{id}/destroy', [App\Http\Controllers\ProjetoController::class, 'destroy'])->name('projeto-destroy');
+        Route::get('/projeto/{id}/filtrar', [App\Http\Controllers\ProjetoController::class, 'filtrar'])->name('projeto-filtrar');
 
         // Indicador
         Route::get('/publicacao/indicadores', [App\Http\Controllers\IndicadorController::class, 'index'])->name('indicadores');
@@ -102,6 +103,7 @@ Route::prefix(env('APP_FOLDER', ''))->group(function () { //considerando que o p
         Route::get('/publicacao/indicador/{id}/editar', [App\Http\Controllers\IndicadorController::class, 'edit'])->name('indicador-edit');
         Route::post('/indicador/{id}/editar', [App\Http\Controllers\IndicadorController::class, 'update'])->name('indicador-update');
         Route::get('/indicador/{id}/destroy', [App\Http\Controllers\IndicadorController::class, 'destroy'])->name('indicador-destroy');
+        Route::get('/indicador/{id}/dados', [App\Http\Controllers\IndicadorController::class, 'getIndicador'])->name('get-indicador');
 
         // Variavel
         Route::get('/publicacao/variaveis', [App\Http\Controllers\VariavelController::class, 'index'])->name('variaveis');
@@ -111,6 +113,7 @@ Route::prefix(env('APP_FOLDER', ''))->group(function () { //considerando que o p
         Route::get('/publicacao/variavel/{id}/editar', [App\Http\Controllers\VariavelController::class, 'edit'])->name('variavel-edit');
         Route::post('/variavel/{id}/editar', [App\Http\Controllers\VariavelController::class, 'update'])->name('variavel-update');
         Route::get('/variavel/{id}/destroy', [App\Http\Controllers\VariavelController::class, 'destroy'])->name('variavel-destroy');
+        Route::get('/variavel/{id}/periodos', [App\Http\Controllers\VariavelController::class, 'periodos'])->name('variavel-periodos');
         
         // Valores
         Route::get('/valores', [App\Http\Controllers\ValorController::class, 'index'])->name('valores');
@@ -120,6 +123,8 @@ Route::prefix(env('APP_FOLDER', ''))->group(function () { //considerando que o p
 
         // Gráfico
         Route::get('/graficos', [App\Http\Controllers\GraficoController::class, 'index'])->name('graficos');
+        Route::get('/grafico/novo', [App\Http\Controllers\GraficoController::class, 'create'])->name('grafico-create');
+        Route::get('/grafico/criar', [App\Http\Controllers\GraficoController::class, 'create'])->name('grafico-store');
 
         //Gestão de Usuários e Permissões
         Route::resource('users', App\Http\Controllers\UserController::class)->middleware('permission:user-list');
