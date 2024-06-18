@@ -30,6 +30,7 @@ Route::get('projetos', [ProjetoApiController::class, 'index']);
 // Indicadores
 Route::get('indicadores', [IndicadorApiController::class, 'index']);
 Route::get('indicadores/{projeto_id}', [IndicadorApiController::class, 'show']);
+Route::get('indicador/{id}', [IndicadorApiController::class, 'getIndicador']);
 
 // Valores
 Route::get('valores', [ValorApiController::class, 'index']);
