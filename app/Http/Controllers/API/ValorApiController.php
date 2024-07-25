@@ -76,11 +76,11 @@ class ValorApiController extends Controller
 
         //     if(in_array($valor_periodo, $periodo) == false){
         //         array_push($periodo, $valor_periodo);
-        //     } 
+        //     }
 
         //     $valor = $valores[$i]['valor']['valor'];
         //     array_push($array_valores, $valor);
-            
+
         // }
 
         return ValorResource::collection($valores);
@@ -108,7 +108,7 @@ class ValorApiController extends Controller
     *                  example="result",
     *                  value={
     *                          "data":{
-    *                           {    
+    *                           {
     *                               "id": "integer",
     *                               "regiao": {
     *                                   "id": "integer",
@@ -121,7 +121,7 @@ class ValorApiController extends Controller
     *                               "categoria": "string",
     *                               "valor": "string",
     *                           },
-    *                           {    
+    *                           {
     *                               "id": "integer",
     *                               "regiao": {
     *                                   "id": "integer",
@@ -156,6 +156,7 @@ class ValorApiController extends Controller
             ->leftJoin('valores', 'valores.id', 'variavel_valores.valor_id')
             ->leftJoin('regioes', 'regioes.id', 'valores.regiao_id')
             ->leftJoin('tipo_regioes', 'tipo_regioes.id', 'regioes.tipo_regiao_id')
+            ->orderBy('valores.periodo', 'ASC')
             ->orderBy('regioes.nome', 'ASC')
             ->where('variavel_valores.variavel_id', '=', $variavel_id)
             ->get();
@@ -170,7 +171,7 @@ class ValorApiController extends Controller
 
             if(in_array($valor_periodo, $periodo) == false){
                 array_push($periodo, $valor_periodo);
-            } 
+            }
 
             $valores = $valor[$i]['valor']['valor'];
             array_push($array_valores, $valores);
@@ -178,7 +179,7 @@ class ValorApiController extends Controller
             if(in_array($valor_regiao, $regioes) == false){
                 array_push($regioes, $valor_regiao);
             }
-            
+
         }
 
         return ValorResource::collection($valor)->additional(['periodo'=>$periodo, 'valores'=>$array_valores, 'regioes'=>$regioes]);

@@ -14,7 +14,7 @@
     },
     "servers": [
         {
-            "url": "http://127.0.0.1:8000/api",
+            "url": "http://127.0.0.1:8000/indicadores_be/api",
             "description": "Demo API Server"
         },
         {
@@ -30,16 +30,6 @@
                 "summary": "Pega Todos Indicadores",
                 "description": "Retorna a lista de todos Indicadores existentes na base",
                 "operationId": "e19cb4a65abf66651a0c640be5e82d77",
-                "parameters": [
-                    {
-                        "name": "id",
-                        "in": "path",
-                        "required": true,
-                        "schema": {
-                            "type": "integer"
-                        }
-                    }
-                ],
                 "responses": {
                     "200": {
                         "description": "Sucesso",
@@ -428,14 +418,14 @@
                 }
             }
         },
-        "/variaveis": {
+        "/variavel": {
             "get": {
                 "tags": [
                     "Variável"
                 ],
                 "summary": "Traz a lista de Variáveis",
                 "description": "Retorna a lista de Variáveis",
-                "operationId": "034dfdad1c9e95361d9eb278220df080",
+                "operationId": "987132ad30908b219daf29d354aa8623",
                 "responses": {
                     "200": {
                         "description": "Sucesso",
@@ -524,14 +514,14 @@
                 }
             }
         },
-        "/indicador/{indicador_id}/variaveis": {
+        "/indicador/{indicador_id}/variavel": {
             "get": {
                 "tags": [
                     "Variável"
                 ],
                 "summary": "Traz a lista de variáveis de um indicador",
                 "description": "Retorna a lista de Variáveis de um indicador",
-                "operationId": "04118b3ec6863d106a28fe956f161514",
+                "operationId": "aefe16e433b8ecb77104bda176eb034b",
                 "parameters": [
                     {
                         "name": "indicador_id",

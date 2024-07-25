@@ -16,14 +16,6 @@ class IndicadorApiController extends Controller
     *      tags={"Indicadores"},
     *      summary="Pega Todos Indicadores",
     *      description="Retorna a lista de todos Indicadores existentes na base",
-    *      @OA\Parameter(
-    *          name="id",
-    *          required=true,
-    *          in="path",
-    *          @OA\Schema(
-    *              type="integer"
-    *          )
-    *      ),
     *      @OA\Response(
     *          response=200,
     *          description="Sucesso",
